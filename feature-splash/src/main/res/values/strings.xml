@@ -1,0 +1,6 @@
+<resources>
+    <string name="title_activity_splash">FullscreenActivity</string>
+
+    <string name="label_fragment_welcome_logo">marvel</string>
+    <string name="label_fragment_welcome_button_continue">continue...</string>
+</resources>

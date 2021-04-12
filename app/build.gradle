@@ -1,0 +1,57 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'koin'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.cmdv.mymarvelapp"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    dataBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    implementation project(path: ':core')
+    implementation project(path: ':data')
+    implementation project(path: ':domain')
+    implementation project(path: ':feature-splash')
+    implementation project(path: ':feature-characters')
+    implementation project(path: ':feature-character-details')
+
+    implementation libs.kotlin_stdlib
+    implementation libs.core_ktx
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.constraintlayout
+    // Koin
+    implementation libs.koin
+    implementation libs.koin_scope
+    implementation libs.koin_view_model
+}

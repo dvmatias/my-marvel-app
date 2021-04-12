@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cmdv.feature.SplashViewModel" />
+
+        <variable
+            name="navDirection"
+            type="androidx.navigation.NavDirections" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/marvel_red">
+
+        <TextView
+            android:id="@+id/textViewLogo"
+            style="@style/TextAppearance.AppCompat.Display4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/marvel_regular"
+            android:text="@string/label_fragment_welcome_logo"
+            android:textAllCaps="true"
+            android:textColor="@color/text_color_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonContinue"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dim_16dp"
+            android:layout_marginBottom="@dimen/dim_16dp"
+            android:background="@null"
+            android:fontFamily="@font/comic"
+            android:onClick='@{()-> viewModel.setDestination(navDirection.actionId)}'
+            android:padding="@dimen/dim_4dp"
+            android:text="@string/label_fragment_welcome_button_continue"
+            android:textColor="@color/text_color_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

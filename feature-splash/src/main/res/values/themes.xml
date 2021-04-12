@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="Theme.SplashActivity" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="Theme.SplashActivity.Fullscreen" parent="Theme.SplashActivity">
+        <item name="android:actionBarStyle">@style/Widget.Theme.MyMarvelApp.ActionBar.Fullscreen</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:statusBarColor">#50000000</item>
+        <item name="android:navigationBarColor">#50000000</item>
+    </style>
+
+    <style name="ThemeOverlay.MyMarvelApp.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/marvel_red</item>
+        <item name="fullscreenTextColor">@color/text_color_white</item>
+    </style>
+</resources>

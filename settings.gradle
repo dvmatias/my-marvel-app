@@ -1,0 +1,9 @@
+include ':feature-character-details'
+include ':feature-characters'
+include ':feature-splash'
+include ':common'
+include ':core'
+include ':domain'
+include ':data'
+include ':app'
+rootProject.name = "My Marvel App"

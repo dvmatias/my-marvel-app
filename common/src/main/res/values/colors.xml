@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="marvel_red">#e23636</color>
+    <color name="marvel_black">#000000</color>
+    <color name="marvel_gray">#504a4a</color>
+    <color name="marvel_blue">#518cca</color>
+    <color name="marvel_orange">#f78f3f</color>
+
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="text_color_white">#FFFFFF</color>
+</resources>

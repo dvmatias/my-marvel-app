@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.cmdv.feature.fragments.AppWelcomeFragment"
+        android:label="fragment_app_welcome"
+        tools:layout="@layout/fragment_app_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_appDetailsFragment"
+            app:destination="@id/appDetailsFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/appDetailsFragment"
+        android:name="com.cmdv.feature.fragments.AppDetailsFragment"
+        android:label="fragment_app_details"
+        tools:layout="@layout/fragment_app_details" />
+</navigation>
