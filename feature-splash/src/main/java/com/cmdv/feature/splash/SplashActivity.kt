@@ -1,19 +1,17 @@
-package com.cmdv.feature
+package com.cmdv.feature.splash
 
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.cmdv.common.extensions.hideSystemUi
 import com.cmdv.core.base.BaseActivity
-import com.cmdv.feature.databinding.ActivitySplashBinding
+import com.cmdv.feature.splash.databinding.ActivitySplashBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class SplashActivity : BaseActivity<SplashActivity, ActivitySplashBinding>() {
+class SplashActivity : BaseActivity<SplashActivity, ActivitySplashBinding>(R.layout.activity_splash) {
     private val viewModel: SplashViewModel by viewModel()
     private lateinit var navController: NavController
-
-    override fun getLayoutRes(): Int = R.layout.activity_splash
 
     override fun initView() {
         navController =
@@ -23,8 +21,12 @@ class SplashActivity : BaseActivity<SplashActivity, ActivitySplashBinding>() {
     }
 
     override fun observe() {
-        viewModel.getDestination().observe(this, { event ->
+        viewModel.newDestination.observe(this, { event ->
             navigate(event.peekContent())
+        })
+
+        viewModel.goToCharactersActivity.observe(this, { event ->
+            if (event.peekContent()) goToCharactersActivity()
         })
     }
 
@@ -33,7 +35,13 @@ class SplashActivity : BaseActivity<SplashActivity, ActivitySplashBinding>() {
         if (hasFocus) window.let { it.decorView.hideSystemUi(it) }
     }
 
-    private fun navigate(destinationId: Int) = kotlin.run { navController.navigate(destinationId) }
+    private fun navigate(destinationId: Int) {
+        navController.navigate(destinationId)
+    }
+
+    private fun goToCharactersActivity() {
+        navigator.toCharacters(from = this, finish = true)
+    }
 
     private fun handleBackAction() {
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {

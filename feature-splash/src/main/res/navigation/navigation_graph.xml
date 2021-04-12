@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/welcomeFragment">
+    app:startDestination="@id/appWelcomeFragment">
 
     <fragment
-        android:id="@+id/welcomeFragment"
-        android:name="com.cmdv.feature.fragments.AppWelcomeFragment"
+        android:id="@+id/appWelcomeFragment"
+        android:name="com.cmdv.feature.splash.fragments.AppWelcomeFragment"
         android:label="fragment_app_welcome"
         tools:layout="@layout/fragment_app_welcome" >
         <action
-            android:id="@+id/action_welcomeFragment_to_appDetailsFragment"
+            android:id="@+id/action_appWelcomeFragment_to_appDetailsFragment"
             app:destination="@id/appDetailsFragment"
             app:launchSingleTop="true"
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/appDetailsFragment"
-        android:name="com.cmdv.feature.fragments.AppDetailsFragment"
+        android:name="com.cmdv.feature.splash.fragments.AppDetailsFragment"
         android:label="fragment_app_details"
         tools:layout="@layout/fragment_app_details" />
 </navigation>

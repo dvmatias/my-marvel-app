@@ -2,34 +2,53 @@ package com.cmdv.core.base
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.cmdv.core.navigation.Navigator
 import org.koin.android.ext.android.inject
 
-abstract class BaseActivity<in A : Activity, B : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<A: Activity, in B>(
+    @LayoutRes private val layoutResId: Int?
+) : AppCompatActivity() where B : ViewDataBinding  {
     protected val navigator: Navigator by inject()
-    protected lateinit var binding: B
+    private lateinit var binding: ViewDataBinding
 
-    protected open fun getExtras() {}
-    protected abstract fun getLayoutRes(): Int
-    protected abstract fun initView()
+    open fun getExtras() {}
+
+    abstract fun initView()
+
     protected abstract fun observe()
 
-    @Suppress("UNCHECKED_CAST")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, getLayoutRes())
-        binding.lifecycleOwner = this
+    final override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+        initialize()
+    }
 
-        logActivityClassName((this as A)::class.java.simpleName)
+    final override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initialize()
+    }
+
+    private fun initialize() {
+        layoutResId?.let { id ->
+            val dataBinder = DataBindingUtil.setContentView<B>(this, id)
+            onActivityCreated(dataBinder)
+        }
+        logActivityClassName()
         initView()
         observe()
     }
 
-    private fun logActivityClassName(activityClassName: String) {
-        Log.d("SCREEN :: ", activityClassName)
+    private fun onActivityCreated(dataBinder: B) {
+        binding = dataBinder
+    }
+
+    private fun logActivityClassName() {
+        @Suppress("UNCHECKED_CAST")
+        Log.d("SCREEN :: ", (this as A)::class.java.simpleName)
     }
 }

@@ -3,4 +3,5 @@
 
     <string name="label_fragment_welcome_logo">marvel</string>
     <string name="label_fragment_welcome_button_continue">continue...</string>
+    <string name="label_fragment_welcome_button_start">start</string>
 </resources>

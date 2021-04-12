@@ -11,8 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMarvelApp">
 
-        <activity android:name="com.cmdv.feature.SplashActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name="com.cmdv.feature.splash.SplashActivity"
+            android:screenOrientation="fullSensor"
             android:theme="@style/Theme.SplashActivity.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.cmdv.feature.characters.CharactersActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.CharactersActivity" />
     </application>
 
 </manifest>

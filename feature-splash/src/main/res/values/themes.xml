@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- Splash -->
     <style name="Theme.SplashActivity" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="Theme.SplashActivity.Fullscreen" parent="Theme.SplashActivity">
@@ -13,5 +14,11 @@
     <style name="ThemeOverlay.MyMarvelApp.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/marvel_red</item>
         <item name="fullscreenTextColor">@color/text_color_white</item>
+    </style>
+
+    <!-- Characters -->
+    <style name="Theme.CharactersActivity" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:statusBarColor">@color/marvel_red</item>
+        <item name="android:navigationBarColor">@color/marvel_red</item>
     </style>
 </resources>
