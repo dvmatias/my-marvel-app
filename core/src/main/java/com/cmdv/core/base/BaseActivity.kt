@@ -11,16 +11,19 @@ import androidx.databinding.ViewDataBinding
 import com.cmdv.core.navigation.Navigator
 import org.koin.android.ext.android.inject
 
-abstract class BaseActivity<A: Activity, in B>(
+private const val TAG = "ACTIVITY :: "
+
+abstract class BaseActivity<in A, in B>(
     @LayoutRes private val layoutResId: Int?
-) : AppCompatActivity() where B : ViewDataBinding  {
+) : AppCompatActivity()
+        where A : Activity,
+              B : ViewDataBinding {
+
     protected val navigator: Navigator by inject()
     private lateinit var binding: ViewDataBinding
 
     open fun getExtras() {}
-
     abstract fun initView()
-
     protected abstract fun observe()
 
     final override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -47,8 +50,8 @@ abstract class BaseActivity<A: Activity, in B>(
         binding = dataBinder
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun logActivityClassName() {
-        @Suppress("UNCHECKED_CAST")
-        Log.d("SCREEN :: ", (this as A)::class.java.simpleName)
+        Log.d(TAG, (this as A)::class.java.simpleName)
     }
 }
