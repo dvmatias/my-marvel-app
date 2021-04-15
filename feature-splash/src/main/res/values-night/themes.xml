@@ -1,7 +1,7 @@
 <resources>
 
     <style name="ThemeOverlay.MyMarvelApp.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/marvel_red</item>
+        <item name="fullscreenBackgroundColor">@color/marvel_red_100</item>
         <item name="fullscreenTextColor">@color/text_color_white</item>
     </style>
 </resources>

@@ -11,7 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 25
+private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 21
 private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
 
 @ExperimentalCoroutinesApi
@@ -27,7 +27,7 @@ class CharactersViewModel(
         getCharacters(LIMIT_CHARACTERS_FETCH_DEFAULT, OFFSET_CHARACTERS_FETCH_DEFAULT)
     }
 
-    fun getCharacters(limit: Int, offset: Int) {
+    fun getCharacters(limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT, offset: Int) {
         viewModelScope.launch {
             getCharactersUseCase.launch(
                 GetCharactersUseCase.Params(limit, offset)

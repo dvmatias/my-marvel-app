@@ -13,14 +13,15 @@ import org.koin.android.ext.android.inject
 
 private const val TAG = "ACTIVITY :: "
 
-abstract class BaseActivity<in A, in B>(
+abstract class BaseActivity<in A, B>(
     @LayoutRes private val layoutResId: Int?
 ) : AppCompatActivity()
         where A : Activity,
               B : ViewDataBinding {
 
+    protected val tag: String = this::class.java.simpleName
     protected val navigator: Navigator by inject()
-    private lateinit var binding: ViewDataBinding
+    protected lateinit var binding: B
 
     open fun getExtras() {}
     abstract fun initView()

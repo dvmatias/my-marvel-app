@@ -23,7 +23,8 @@ class MarvelApplication : Application() {
                     repositoryModule,
                     serviceModule,
                     networkModule,
-                    roomModule
+                    roomModule,
+                    adapterModule
                 )
             )
         }

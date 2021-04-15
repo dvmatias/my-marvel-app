@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="character"
+            type="com.cmdv.domain.model.CharacterModel" />
+
+        <variable
+            name="listener"
+            type="com.cmdv.feature.characters.listener.CharacterAdapterListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/dim_8dp"
+        android:onClick="@{(view) -> listener != null ? listener.onCharacterClick(view, character.id) : Void}"
+        app:cardElevation="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageViewThumbnail"
+                android:layout_width="@dimen/follow_constraints"
+                android:layout_height="@dimen/follow_constraints"
+                android:background="@android:color/background_light"
+                android:contentDescription="@null"
+                app:image="@{character.thumbnail}"
+                tools:src="@drawable/mock_character_img"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="@dimen/follow_constraints"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/cereal_bold"
+                android:lines="1"
+                android:paddingStart="@dimen/dim_12dp"
+                android:textColor="@color/text_color_title"
+                android:paddingTop="@dimen/dim_8dp"
+                android:paddingEnd="@dimen/dim_12dp"
+                android:text="@{character.name}"
+                android:textSize="@dimen/text_16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewThumbnail"
+                tools:text="Character's Name" />
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="@dimen/follow_constraints"
+                android:layout_height="0dp"
+                android:fontFamily="@font/cereal_book"
+                android:minHeight="@dimen/dim_24dp"
+                android:paddingStart="@dimen/dim_12dp"
+                android:paddingTop="@dimen/dim_2dp"
+                android:paddingEnd="@dimen/dim_12dp"
+                android:textColor="@color/text_color_subtitle"
+                android:text="@{!character.description.equals(&quot;&quot;) ? character.description : @string/text_item_character_no_description}"
+                android:textSize="@dimen/text_13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewName"
+                tools:text="Description. Lorem ipsum dolor sato sit amet lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
+
+            <View
+                android:layout_width="@dimen/follow_constraints"
+                android:layout_height="@dimen/dim_20dp"
+                android:background="@drawable/shape_item_character_description_fade"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

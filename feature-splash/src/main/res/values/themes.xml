@@ -12,13 +12,13 @@
     </style>
 
     <style name="ThemeOverlay.MyMarvelApp.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/marvel_red</item>
+        <item name="fullscreenBackgroundColor">@color/marvel_red_100</item>
         <item name="fullscreenTextColor">@color/text_color_white</item>
     </style>
 
     <!-- Characters -->
     <style name="Theme.CharactersActivity" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="android:statusBarColor">@color/marvel_red</item>
-        <item name="android:navigationBarColor">@color/marvel_red</item>
+        <item name="android:statusBarColor">@color/marvel_red_100</item>
+        <item name="android:navigationBarColor">@color/marvel_red_100</item>
     </style>
 </resources>

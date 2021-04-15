@@ -1,6 +1,6 @@
 package com.cmdv.domain.utils
 
-class LiveDataStatusWrapper<out T>(val status: Status, val data: T?, failureType: FailureType?) {
+class LiveDataStatusWrapper<out T>(val status: Status, val data: T?, val failureType: FailureType?) {
 
     enum class Status {
         LOADING,

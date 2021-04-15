@@ -3,5 +3,7 @@
 
     <string name="label_fragment_welcome_logo">marvel</string>
     <string name="label_fragment_welcome_button_continue">continuar...</string>
-    <string name="label_fragment_welcome_button_start">comenzar</string>
+    <string name="label_fragment_welcome_button_start">comenzar...</string>
+
+    <string name="text_item_character_no_description">Sin descripicón</string>
 </resources>

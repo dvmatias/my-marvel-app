@@ -14,7 +14,12 @@ open class NetworkManager(private val networkHandler: NetworkHandler) {
                     with(response) {
                         val body = response.body()
                         if (isSuccessful && body != null) {
-                            LiveDataStatusWrapper.success(transformResponse(body))
+                            try {
+                                LiveDataStatusWrapper.success(transformResponse(body))
+                            } catch (e: Exception) {
+                                LiveDataStatusWrapper.error(
+                                    failureType = FailureType.ResponseTransformError)
+                            }
                         } else {
                             LiveDataStatusWrapper.error(failureType = FailureType.ServerError)
                         }

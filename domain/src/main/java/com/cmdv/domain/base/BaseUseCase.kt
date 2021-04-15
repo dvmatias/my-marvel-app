@@ -12,12 +12,8 @@ abstract class BaseUseCase<out R, in P> {
     @Suppress("UNCHECKED_CAST")
     open fun launch(params: P): Flow<R> =
         callbackFlow {
-            offer(LiveDataStatusWrapper.loading(null) as R)
-            offer(
-                withContext(Dispatchers.Default) {
-                    run(params)
-                }
-            )
+            offer(withContext(Dispatchers.Main.immediate) { LiveDataStatusWrapper.loading(null) as R })
+            offer(withContext(Dispatchers.Default) { run(params) })
             awaitClose { cancel() }
         }
 

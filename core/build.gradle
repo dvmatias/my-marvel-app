@@ -44,4 +44,7 @@ dependencies {
     implementation libs.coroutines_core
     implementation libs.coroutines_android
     implementation libs.coroutines_play_services
+    // Glide
+    implementation libs.glide
+    kapt libs.glide
 }
