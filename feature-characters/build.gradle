@@ -42,4 +42,7 @@ dependencies {
 
     implementation libs.lifecycle_viewmodel_ktx
     implementation libs.swipe_layout
+    // Navigation
+    implementation libs.navigation_fragment_ktx
+    implementation libs.navigation_ui_ktx
 }

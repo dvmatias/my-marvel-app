@@ -3,42 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.cmdv.feature.characters.CharactersViewModel" />
-    </data>
+    <data> </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".characters.CharactersActivity">
 
-        <!--  TODO search bar-->
-        <View
-            android:id="@+id/searchBar"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="@dimen/follow_constraints"
+            android:layout_height="@dimen/follow_constraints"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/bottomNav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/characters_nav_graph" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/marvel_red_100"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="@dimen/follow_constraints"
-            android:layout_height="@dimen/follow_constraints"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchBar">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerCharacter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:spanCount="3"
-                tools:itemCount="20"
-                tools:listitem="@layout/item_character"/>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            app:menu="@menu/menu_bottom_main" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

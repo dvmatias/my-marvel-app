@@ -15,9 +15,7 @@ private const val TAG = "ACTIVITY :: "
 
 abstract class BaseActivity<in A, B>(
     @LayoutRes private val layoutResId: Int?
-) : AppCompatActivity()
-        where A : Activity,
-              B : ViewDataBinding {
+) : AppCompatActivity() where A : Activity, B : ViewDataBinding {
 
     protected val tag: String = this::class.java.simpleName
     protected val navigator: Navigator by inject()

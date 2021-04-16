@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/appWelcomeFragment"
-        android:name="com.cmdv.feature.splash.fragments.AppWelcomeFragment"
+        android:name="com.cmdv.feature.splash.fragment.AppWelcomeFragment"
         android:label="fragment_app_welcome"
         tools:layout="@layout/fragment_app_welcome" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/appDetailsFragment"
-        android:name="com.cmdv.feature.splash.fragments.AppDetailsFragment"
+        android:name="com.cmdv.feature.splash.fragment.AppDetailsFragment"
         android:label="fragment_app_details"
         tools:layout="@layout/fragment_app_details" />
 </navigation>
