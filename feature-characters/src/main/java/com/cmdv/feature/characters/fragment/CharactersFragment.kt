@@ -1,10 +1,10 @@
 package com.cmdv.feature.characters.fragment
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cmdv.core.base.BaseFragment
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.utils.FailureType
@@ -16,13 +16,18 @@ import com.cmdv.feature.characters.databinding.FragmentCharactersBinding
 import com.cmdv.feature.characters.layoutmanager.CharacterLayoutManager
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBinding>(R.layout.fragment_characters) {
-    private val viewModel: CharactersViewModel by viewModel()
+
+    private val viewModel: CharactersViewModel by stateViewModel()
     private val characterAdapter: CharacterAdapter by inject()
     private lateinit var characterLayoutManager: CharacterLayoutManager
+
+    private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
+        viewModel.getFirstTimeCharacters()
+    }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -33,7 +38,7 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
 
     private val characterAdapterListener = object : CharacterAdapterListener {
         override fun loadMore(offset: Int) {
-            viewModel.getCharacters(offset = offset)
+            viewModel.getMoreCharacters(offset = offset)
         }
 
         override fun onCharacterClick(view: View, id: Int) {
@@ -49,13 +54,16 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
             adapter = characterAdapter
             addOnScrollListener(scrollListener)
         }
+
+        binding.swipeRefresh.setOnRefreshListener(onRefreshListener)
     }
 
     override fun observe() {
-        viewModel.characters.observe(this, {
+        viewModel.getFirstTimeCharacters()
+        viewModel.lastFetchedCharacters.observe(this, {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
-                    val characters = it.data?.data?.results ?: listOf()
+                    val characters = it.data?.characters ?: listOf()
                     if (characters.isNotEmpty()) {
                         setSuccessViewState(characters)
                     } else {
@@ -66,22 +74,6 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
                 LiveDataStatusWrapper.Status.ERROR -> setErrorViewState(it.failureType)
             }
         })
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun setLoadingViewState() {

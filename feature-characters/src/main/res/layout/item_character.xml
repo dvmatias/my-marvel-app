@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="character"
             type="com.cmdv.domain.model.CharacterModel" />
@@ -16,10 +17,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="@dimen/dim_8dp"
         android:onClick="@{(view) -> listener != null ? listener.onCharacterClick(view, character.id) : Void}"
-        app:cardElevation="3dp">
+        app:cardCornerRadius="@dimen/dim_8dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,11 +33,11 @@
                 android:background="@android:color/background_light"
                 android:contentDescription="@null"
                 app:image="@{character.thumbnail}"
-                tools:src="@drawable/mock_character_img"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/mock_character_img" />
 
             <TextView
                 android:id="@+id/textViewName"
@@ -44,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cereal_bold"
                 android:lines="1"
-                android:paddingStart="@dimen/dim_12dp"
-                android:textColor="@color/text_color_title"
+                android:paddingStart="@dimen/dim_10dp"
                 android:paddingTop="@dimen/dim_8dp"
-                android:paddingEnd="@dimen/dim_12dp"
+                android:paddingEnd="@dimen/dim_10dp"
                 android:text="@{character.name}"
+                android:textColor="@color/text_color_title"
                 android:textSize="@dimen/text_16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,13 +61,14 @@
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="0dp"
                 android:fontFamily="@font/cereal_book"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="-1dp"
                 android:minHeight="@dimen/dim_24dp"
-                android:paddingStart="@dimen/dim_12dp"
-                android:paddingTop="@dimen/dim_2dp"
-                android:paddingEnd="@dimen/dim_12dp"
+                android:paddingStart="@dimen/dim_10dp"
+                android:paddingEnd="@dimen/dim_10dp"
                 android:textColor="@color/text_color_subtitle"
-                android:text="@{!character.description.equals(&quot;&quot;) ? character.description : @string/text_item_character_no_description}"
                 android:textSize="@dimen/text_13sp"
+                app:characterItemDescription="@{character.description}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.2"
                 app:layout_constraintStart_toStartOf="parent"

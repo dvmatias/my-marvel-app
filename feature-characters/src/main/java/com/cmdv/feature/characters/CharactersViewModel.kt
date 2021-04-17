@@ -1,12 +1,14 @@
 package com.cmdv.feature.characters
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.model.GetCharactersResponseModel
 import com.cmdv.domain.usecase.GetCharactersUseCase
 import com.cmdv.domain.utils.LiveDataStatusWrapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,24 +18,58 @@ private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
 
 @ExperimentalCoroutinesApi
 class CharactersViewModel(
-    private val getCharactersUseCase: GetCharactersUseCase
+    private val getCharactersUseCase: GetCharactersUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _characters = MutableLiveData<LiveDataStatusWrapper<GetCharactersResponseModel>>()
-    val characters: LiveData<LiveDataStatusWrapper<GetCharactersResponseModel>>
-        get() = _characters
+    private var totalCharactersCount: Int = 0
+        set(value) {
+            field = if (field == 0) value else 0
+        }
 
-    init {
-        getCharacters(LIMIT_CHARACTERS_FETCH_DEFAULT, OFFSET_CHARACTERS_FETCH_DEFAULT)
+    val characters: MutableLiveData<List<CharacterModel>> =
+        savedStateHandle.getLiveData("CHARACTERS")
+
+    private val _lastFetchedCharacters =
+        MutableLiveData<LiveDataStatusWrapper<GetCharactersResponseModel>>()
+    val lastFetchedCharacters = _lastFetchedCharacters
+
+    fun getFirstTimeCharacters(
+        limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT,
+        offset: Int = OFFSET_CHARACTERS_FETCH_DEFAULT
+    ) {
+        if (savedStateHandle.get<MutableLiveData<List<CharacterModel>>>("CHARACTERS") != null) {
+            _lastFetchedCharacters.value = LiveDataStatusWrapper.success(
+                GetCharactersResponseModel(totalCharactersCount, characters.value ?: listOf())
+            )
+        } else {
+            getMoreCharacters(limit, offset)
+        }
     }
 
-    fun getCharacters(limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT, offset: Int) {
-        viewModelScope.launch {
-            getCharactersUseCase.launch(
-                GetCharactersUseCase.Params(limit, offset)
-            ).collect { response ->
-                _characters.value = response
+    fun getMoreCharacters(limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT, offset: Int) {
+        if (!isAllCharactersLoaded()) {
+            CoroutineScope(Dispatchers.Main.immediate).launch {
+                getCharactersUseCase.launch(GetCharactersUseCase.Params(limit, offset))
+                    .collect { response ->
+                        _lastFetchedCharacters.value = response
+
+                        updateCharacters(response.data?.characters)
+                        totalCharactersCount = response.data?.total ?: 0
+                    }
             }
         }
+    }
+
+    private fun isAllCharactersLoaded(): Boolean =
+        characters.value?.size.let { charactersLoadedCount ->
+            charactersLoadedCount == totalCharactersCount
+        }
+
+    private fun updateCharacters(loadCharacters: List<CharacterModel>?) {
+        val totalsCharacters: ArrayList<CharacterModel> = arrayListOf()
+        characters.value?.let { saved -> totalsCharacters.addAll(saved) }
+        loadCharacters?.let { load -> totalsCharacters.addAll(load) }
+        characters.value = totalsCharacters
     }
 }

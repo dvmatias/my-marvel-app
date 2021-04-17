@@ -50,4 +50,7 @@ dependencies {
     api libs.koin
     api libs.koin_scope
     api libs.koin_view_model
+    // Coroutines
+    implementation libs.coroutines_core
+    implementation libs.coroutines_android
 }

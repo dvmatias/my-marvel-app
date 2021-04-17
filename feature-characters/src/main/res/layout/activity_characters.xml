@@ -26,7 +26,7 @@
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/marvel_red_100"
+            android:background="@color/main"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_bottom_main" />
     </androidx.constraintlayout.widget.ConstraintLayout>

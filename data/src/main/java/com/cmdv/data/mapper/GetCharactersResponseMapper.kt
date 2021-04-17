@@ -13,22 +13,12 @@ object GetCharactersResponseMapper :
 
     override fun transformEntityToModel(e: GetCharactersResponseEntity): GetCharactersResponseModel {
         return GetCharactersResponseModel(
-            transformData(e.data)
+            total = e.data?.total ?: DEFAULT_INT,
+            characters = transformCharacters(e.data?.results)
         )
     }
 
-    private fun transformData(
-        data: GetCharactersResponseEntity.DataEntity?
-    ): GetCharactersResponseModel.DataModel =
-        GetCharactersResponseModel.DataModel(
-            data?.offset ?: DEFAULT_INT,
-            data?.limit ?: DEFAULT_INT,
-            data?.total ?: DEFAULT_INT,
-            data?.count ?: DEFAULT_INT,
-            transformResults(data?.results)
-        )
-
-    private fun transformResults(
+    private fun transformCharacters(
         results: List<CharacterEntity>?
     ): List<CharacterModel> =
         results?.map {

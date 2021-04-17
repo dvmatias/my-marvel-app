@@ -6,11 +6,11 @@ import androidx.navigation.fragment.NavHostFragment
 import com.cmdv.common.extensions.hideSystemUi
 import com.cmdv.core.base.BaseActivity
 import com.cmdv.feature.splash.databinding.ActivitySplashBinding
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 
 class SplashActivity : BaseActivity<SplashActivity, ActivitySplashBinding>(R.layout.activity_splash) {
-    private val viewModel: SplashViewModel by viewModel()
+    private val viewModel: SplashViewModel by stateViewModel()
     private lateinit var navController: NavController
 
     override fun initView() {

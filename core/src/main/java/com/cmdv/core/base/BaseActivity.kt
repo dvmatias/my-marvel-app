@@ -47,6 +47,7 @@ abstract class BaseActivity<in A, B>(
 
     private fun onActivityCreated(dataBinder: B) {
         binding = dataBinder
+        binding.lifecycleOwner = this
     }
 
     @Suppress("UNCHECKED_CAST")
