@@ -41,8 +41,15 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
             viewModel.getMoreCharacters(offset = offset)
         }
 
-        override fun onCharacterClick(view: View, id: Int) {
-            Toast.makeText(requireContext(), "Click ID $id", Toast.LENGTH_SHORT).show()
+        override fun onCharacterClick(view: View, characterId: Int) {
+            Toast.makeText(requireContext(), "Click ID $characterId", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun toggleFavouriteStatus(position: Int, isFavourite: Boolean) {
+            when(isFavourite) {
+                true -> viewModel.addToFavourites(position)
+                false -> viewModel.removeFromFavourites(position)
+            }
         }
     }
 
@@ -53,6 +60,7 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
             layoutManager = characterLayoutManager
             adapter = characterAdapter
             addOnScrollListener(scrollListener)
+            itemAnimator = null
         }
 
         binding.swipeRefresh.setOnRefreshListener(onRefreshListener)
@@ -72,6 +80,15 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
                 }
                 LiveDataStatusWrapper.Status.LOADING -> setLoadingViewState()
                 LiveDataStatusWrapper.Status.ERROR -> setErrorViewState(it.failureType)
+            }
+        })
+
+        viewModel.newFavouritePosition.observe(this, {
+            when (it.status) {
+                LiveDataStatusWrapper.Status.SUCCESS -> {
+                    val position = it.data ?: -1
+                    characterAdapter.updateFavourite(position)
+                }
             }
         })
     }

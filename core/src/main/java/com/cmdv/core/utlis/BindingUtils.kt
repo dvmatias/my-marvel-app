@@ -14,6 +14,11 @@ fun bindCharacterItemImage(imageView: ImageView, imageUrl: String) {
         .load(imageUrl.secureUrl())
         .placeholder(R.drawable.img_character_placeholder)
         .dontAnimate()
+        .let { request ->
+            imageView.drawable?.let {
+                request.placeholder(imageView.drawable.constantState?.newDrawable()?.mutate())
+            } ?: run { request }
+        }
         .centerCrop()
         .into(imageView)
 }

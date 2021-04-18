@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package com.cmdv.mymarvelapp.koin_modules
 
 import androidx.lifecycle.SavedStateHandle
@@ -8,5 +10,5 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 
 val viewModelModule = module {
     viewModel { SplashViewModel() }
-    single { (handle: SavedStateHandle) -> CharactersViewModel(get(), handle) }
+    single { (handle: SavedStateHandle) -> CharactersViewModel(get(), get(), get(), handle) }
 }

@@ -1,11 +1,15 @@
 package com.cmdv.feature.characters
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.model.GetCharactersResponseModel
+import com.cmdv.domain.usecase.AddFavouriteCharacterUseCase
 import com.cmdv.domain.usecase.GetCharactersUseCase
+import com.cmdv.domain.usecase.GetCharactersUseCase.*
+import com.cmdv.domain.usecase.RemoveFavouriteCharacterUseCase
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +23,8 @@ private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
 @ExperimentalCoroutinesApi
 class CharactersViewModel(
     private val getCharactersUseCase: GetCharactersUseCase,
+    private val addFavouriteCharacterUseCase: AddFavouriteCharacterUseCase,
+    private val removeFavouriteCharacterUseCase: RemoveFavouriteCharacterUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -33,6 +39,10 @@ class CharactersViewModel(
     private val _lastFetchedCharacters =
         MutableLiveData<LiveDataStatusWrapper<GetCharactersResponseModel>>()
     val lastFetchedCharacters = _lastFetchedCharacters
+
+    private val _newFavouritePosition =
+        MutableLiveData<LiveDataStatusWrapper<Int>>()
+    val newFavouritePosition = _newFavouritePosition
 
     fun getFirstTimeCharacters(
         limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT,
@@ -50,8 +60,9 @@ class CharactersViewModel(
     fun getMoreCharacters(limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT, offset: Int) {
         if (!isAllCharactersLoaded()) {
             CoroutineScope(Dispatchers.Main.immediate).launch {
-                getCharactersUseCase.launch(GetCharactersUseCase.Params(limit, offset))
-                    .collect { response ->
+                getCharactersUseCase.launch(
+                    Params(limit, offset)
+                ).collect { response ->
                         _lastFetchedCharacters.value = response
 
                         updateCharacters(response.data?.characters)
@@ -71,5 +82,22 @@ class CharactersViewModel(
         characters.value?.let { saved -> totalsCharacters.addAll(saved) }
         loadCharacters?.let { load -> totalsCharacters.addAll(load) }
         characters.value = totalsCharacters
+    }
+
+    fun addToFavourites(position: Int) {
+        val character = characters.value?.get(position)
+        character?.let {
+            CoroutineScope(Dispatchers.Main.immediate).launch {
+                addFavouriteCharacterUseCase.launch(
+                    AddFavouriteCharacterUseCase.Params(character, position)
+                ).collect {
+                    newFavouritePosition.value = it
+                }
+            }
+        }
+    }
+
+    fun removeFromFavourites(characterId: Int) {
+        TODO("Not yet implemented")
     }
 }

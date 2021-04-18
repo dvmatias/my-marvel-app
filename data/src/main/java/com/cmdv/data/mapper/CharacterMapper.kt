@@ -14,7 +14,8 @@ object CharacterMapper : BaseMapper<CharacterEntity, CharacterModel>() {
             e.id ?: DEFAULT_INT,
             e.name ?: DEFAULT_STRING,
             e.description ?: DEFAULT_STRING,
-            transformThumbnail(e.thumbnail)
+            transformThumbnail(e.thumbnail),
+            false
         )
 
     private fun transformThumbnail(thumbnail: CharacterEntity.ThumbnailEntity?): String {

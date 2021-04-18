@@ -72,7 +72,7 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            ViewType.CHARACTER.viewType -> (holder as CharacterViewHolder).bindItem(characters[position], listener)
+            ViewType.CHARACTER.viewType -> (holder as CharacterViewHolder).bindItem(characters[position], listener, position)
             ViewType.FOOTER_LOADING.viewType -> (holder as LoadingViewHolder).show(isLoading)
         }
 
@@ -80,11 +80,17 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = this.characters.size + 1
 
+    fun updateFavourite(position: Int) {
+        this.characters[position].isFavourite = true
+        notifyItemChanged(position)
+    }
+
     class CharacterViewHolder(private val binding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(character: CharacterModel, listener: CharacterAdapterListener?) {
+        fun bindItem(character: CharacterModel, listener: CharacterAdapterListener?, position: Int) {
             binding.character = character
             binding.listener = listener
+            binding.position = position
         }
     }
 
