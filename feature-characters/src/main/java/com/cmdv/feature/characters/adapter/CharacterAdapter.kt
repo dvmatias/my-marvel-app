@@ -18,7 +18,7 @@ private const val ITEM_COUNT_BEFORE_LOAD_MORE = 6
 
 class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val characters: ArrayList<CharacterModel> = arrayListOf()
+    val characters: ArrayList<CharacterModel> = arrayListOf()
     internal var isLoading = true
         set(value) {
             field = value
@@ -80,8 +80,8 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = this.characters.size + 1
 
-    fun updateFavourite(position: Int) {
-        this.characters[position].isFavourite = true
+    fun updateFavourite(position: Int, isFavourite: Boolean) {
+        this.characters[position].isFavourite = isFavourite
         notifyItemChanged(position)
     }
 

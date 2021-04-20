@@ -1,6 +1,6 @@
 package com.cmdv.feature.characters
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,14 +8,9 @@ import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.model.GetCharactersResponseModel
 import com.cmdv.domain.usecase.AddFavouriteCharacterUseCase
 import com.cmdv.domain.usecase.GetCharactersUseCase
-import com.cmdv.domain.usecase.GetCharactersUseCase.*
 import com.cmdv.domain.usecase.RemoveFavouriteCharacterUseCase
 import com.cmdv.domain.utils.LiveDataStatusWrapper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 21
 private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
@@ -28,12 +23,14 @@ class CharactersViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var isAllCharactersLoaded: Boolean = false
+
     private var totalCharactersCount: Int = 0
         set(value) {
             field = if (field == 0) value else 0
         }
 
-    val characters: MutableLiveData<List<CharacterModel>> =
+    private val characters: MutableLiveData<List<CharacterModel>> =
         savedStateHandle.getLiveData("CHARACTERS")
 
     private val _lastFetchedCharacters =
@@ -43,6 +40,10 @@ class CharactersViewModel(
     private val _newFavouritePosition =
         MutableLiveData<LiveDataStatusWrapper<Int>>()
     val newFavouritePosition = _newFavouritePosition
+
+    private val _characterRemovedFromFavourites: MutableLiveData<LiveDataStatusWrapper<Int>> = MutableLiveData()
+    val characterRemovedFromFavourites: LiveData<LiveDataStatusWrapper<Int>>
+        get() = _characterRemovedFromFavourites
 
     fun getFirstTimeCharacters(
         limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT,
@@ -58,46 +59,38 @@ class CharactersViewModel(
     }
 
     fun getMoreCharacters(limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT, offset: Int) {
-        if (!isAllCharactersLoaded()) {
-            CoroutineScope(Dispatchers.Main.immediate).launch {
-                getCharactersUseCase.launch(
-                    Params(limit, offset)
-                ).collect { response ->
-                        _lastFetchedCharacters.value = response
-
-                        updateCharacters(response.data?.characters)
-                        totalCharactersCount = response.data?.total ?: 0
-                    }
-            }
+        if (!isAllCharactersLoaded) {
+            getCharactersUseCase(
+                params = GetCharactersUseCase.Params(limit, offset),
+                wrapper = _lastFetchedCharacters
+            )
         }
     }
 
-    private fun isAllCharactersLoaded(): Boolean =
-        characters.value?.size.let { charactersLoadedCount ->
-            charactersLoadedCount == totalCharactersCount
-        }
-
-    private fun updateCharacters(loadCharacters: List<CharacterModel>?) {
+    fun updateCharacters(loadCharacters: List<CharacterModel>) {
         val totalsCharacters: ArrayList<CharacterModel> = arrayListOf()
         characters.value?.let { saved -> totalsCharacters.addAll(saved) }
-        loadCharacters?.let { load -> totalsCharacters.addAll(load) }
+        totalsCharacters.addAll(loadCharacters)
         characters.value = totalsCharacters
+
+        isAllCharactersLoaded = totalsCharacters.size == totalCharactersCount
     }
 
     fun addToFavourites(position: Int) {
-        val character = characters.value?.get(position)
-        character?.let {
-            CoroutineScope(Dispatchers.Main.immediate).launch {
-                addFavouriteCharacterUseCase.launch(
-                    AddFavouriteCharacterUseCase.Params(character, position)
-                ).collect {
-                    newFavouritePosition.value = it
-                }
-            }
+        characters.value?.get(position)?.let { character ->
+            addFavouriteCharacterUseCase(
+                params = AddFavouriteCharacterUseCase.Params(character, position),
+                wrapper = _newFavouritePosition
+            )
         }
     }
 
-    fun removeFromFavourites(characterId: Int) {
-        TODO("Not yet implemented")
+    fun removeFromFavourites(position: Int) {
+        characters.value?.get(position)?.let { character ->
+            removeFavouriteCharacterUseCase(
+                params = RemoveFavouriteCharacterUseCase.Params(character, position),
+                wrapper = _characterRemovedFromFavourites
+            )
+        }
     }
 }

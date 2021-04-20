@@ -71,11 +71,13 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
         viewModel.lastFetchedCharacters.observe(this, {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
-                    val characters = it.data?.characters ?: listOf()
-                    if (characters.isNotEmpty()) {
-                        setSuccessViewState(characters)
-                    } else {
-                        setEmptyState()
+                    with(it.data?.characters ?: listOf()) {
+                        if (this.isNotEmpty()) {
+                            setSuccessViewState(this)
+                            viewModel.updateCharacters(this)
+                        } else {
+                            setEmptyState()
+                        }
                     }
                 }
                 LiveDataStatusWrapper.Status.LOADING -> setLoadingViewState()
@@ -87,8 +89,19 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
                     val position = it.data ?: -1
-                    characterAdapter.updateFavourite(position)
+                    characterAdapter.updateFavourite(position, true)
                 }
+                else -> {}
+            }
+        })
+
+        viewModel.characterRemovedFromFavourites.observe(this, {
+            when (it.status) {
+                LiveDataStatusWrapper.Status.SUCCESS -> {
+                    val position = it.data ?: -1
+                    characterAdapter.updateFavourite(position, true)
+                }
+                else -> {}
             }
         })
     }

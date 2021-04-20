@@ -1,4 +1,4 @@
-package com.cmdv.core.event
+package com.cmdv.domain.utils
 
 open class Event<out T>(private val content: T) {
 

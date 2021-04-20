@@ -9,6 +9,7 @@ import com.cmdv.data.utils.NetworkManager
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.model.GetCharactersResponseModel
 import com.cmdv.domain.repository.CharactersRepository
+import com.cmdv.domain.utils.Event
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 
 class CharactersRepositoryImpl(
@@ -22,7 +23,11 @@ class CharactersRepositoryImpl(
         offset: Int
     ): LiveDataStatusWrapper<GetCharactersResponseModel> {
         return doNetworkRequest(charactersApi.getCharacters(limit, offset)) {
-            GetCharactersResponseMapper.transformEntityToModel(it)
+            GetCharactersResponseMapper.transformEntityToModel(it).also { response ->
+                response.characters.forEach { character ->
+                    character.isFavourite = favouriteCharactersDao.getById(character.id) != null
+                }
+            }
         }
     }
 
@@ -33,7 +38,9 @@ class CharactersRepositoryImpl(
 
     }
 
-    override fun removeFavourite(id: Int): LiveDataStatusWrapper<Boolean> {
-        TODO("Not yet implemented")
+    override fun removeFavourite(character: CharacterModel, position: Int): LiveDataStatusWrapper<Int> {
+        val roomEntity = CharacterRoomMapper.transformModelToEntity(character)
+        favouriteCharactersDao.delete(roomEntity)
+        return LiveDataStatusWrapper.success(position)
     }
 }

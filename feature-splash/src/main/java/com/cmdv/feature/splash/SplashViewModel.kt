@@ -3,7 +3,7 @@ package com.cmdv.feature.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cmdv.core.event.Event
+import com.cmdv.domain.utils.Event
 
 class SplashViewModel : ViewModel() {
     private val _newDestination: MutableLiveData<Event<Int>> = MutableLiveData()
