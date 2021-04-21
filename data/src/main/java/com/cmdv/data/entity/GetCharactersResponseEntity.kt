@@ -13,6 +13,6 @@ data class GetCharactersResponseEntity(
         @SerializedName("limit") val limit: Int?,
         @SerializedName("total") val total: Int?,
         @SerializedName("count") val count: Int?,
-        @SerializedName("results") val results: List<CharacterEntity>?
+        @SerializedName("results") val results: ArrayList<CharacterEntity>?
     )
 }

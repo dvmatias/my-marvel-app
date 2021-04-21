@@ -28,7 +28,7 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun addItems(characters: List<CharacterModel>) {
         val startIndex = itemCount
-        this.characters.addAll(characters)
+        this.characters.addAllNoRepeated(characters)
         isLoading = false
         notifyItemRangeChanged(startIndex, itemCount)
     }
@@ -98,6 +98,14 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun show(show: Boolean) {
             binding.root.visibility = if (show) View.VISIBLE else View.GONE
+        }
+    }
+}
+
+fun <T> ArrayList<T>.addAllNoRepeated(newElements: List<T>) {
+    newElements.forEach { newElement ->
+        if (!this.contains(newElement)) {
+            this.add(newElement)
         }
     }
 }

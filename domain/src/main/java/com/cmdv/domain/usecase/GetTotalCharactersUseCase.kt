@@ -1,19 +1,18 @@
 package com.cmdv.domain.usecase
 
 import com.cmdv.domain.base.BaseUseCase
-import com.cmdv.domain.model.CharacterModel
+import com.cmdv.domain.model.GetCharactersResponseModel
 import com.cmdv.domain.repository.CharactersRepository
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class RemoveFavouriteCharacterUseCase(
+class GetTotalCharactersUseCase(
     private val charactersRepository: CharactersRepository
-) : BaseUseCase<LiveDataStatusWrapper<Int>, RemoveFavouriteCharacterUseCase.Params>() {
+) : BaseUseCase<LiveDataStatusWrapper<Int>, GetTotalCharactersUseCase.Params>() {
 
-    @ExperimentalCoroutinesApi
     override suspend fun run(params: Params): LiveDataStatusWrapper<Int> =
-        charactersRepository.removeFavourite(params.character, params.position)
+        charactersRepository.getTotalCharacters()
 
-    data class Params(val character: CharacterModel, val position: Int)
+    class Params
 }

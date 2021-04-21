@@ -19,10 +19,13 @@ object GetCharactersResponseMapper :
     }
 
     private fun transformCharacters(
-        results: List<CharacterEntity>?
-    ): List<CharacterModel> =
+        results: ArrayList<CharacterEntity>?
+    ): ArrayList<CharacterModel> {
+        val characters = arrayListOf<CharacterModel>()
         results?.map {
-            CharacterMapper.transformEntityToModel(it)
-        } ?: kotlin.run { listOf() }
+            characters.add(CharacterMapper.transformEntityToModel(it))
+        }
+        return characters
+    }
 
 }

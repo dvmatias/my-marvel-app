@@ -14,6 +14,6 @@ interface FavouriteCharactersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFavourite(favouriteCharacter: FavouriteCharacterRoomEntity): Long
 
-    @Delete
-    fun delete(favouriteCharacter: FavouriteCharacterRoomEntity)
+    @Query("DELETE FROM `favourite-characters-room-database` WHERE characterId IN (:id)")
+    fun delete(id: Int): Int
 }

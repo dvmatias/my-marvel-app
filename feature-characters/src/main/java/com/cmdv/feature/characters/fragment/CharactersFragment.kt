@@ -9,24 +9,25 @@ import com.cmdv.core.base.BaseFragment
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.utils.FailureType
 import com.cmdv.domain.utils.LiveDataStatusWrapper
-import com.cmdv.feature.characters.CharactersViewModel
 import com.cmdv.feature.characters.R
 import com.cmdv.feature.characters.adapter.CharacterAdapter
 import com.cmdv.feature.characters.databinding.FragmentCharactersBinding
 import com.cmdv.feature.characters.layoutmanager.CharacterLayoutManager
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
+@InternalCoroutinesApi
 @Suppress("EXPERIMENTAL_API_USAGE")
-class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBinding>(R.layout.fragment_characters) {
-
+class CharactersFragment :
+    BaseFragment<CharactersFragment, FragmentCharactersBinding>(R.layout.fragment_characters) {
     private val viewModel: CharactersViewModel by stateViewModel()
     private val characterAdapter: CharacterAdapter by inject()
     private lateinit var characterLayoutManager: CharacterLayoutManager
 
     private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        viewModel.getFirstTimeCharacters()
+        viewModel.getCharacters(refresh = true)
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -38,7 +39,7 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
 
     private val characterAdapterListener = object : CharacterAdapterListener {
         override fun loadMore(offset: Int) {
-            viewModel.getMoreCharacters(offset = offset)
+            viewModel.getCharacters(offset = offset)
         }
 
         override fun onCharacterClick(view: View, characterId: Int) {
@@ -47,34 +48,26 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
 
         override fun toggleFavouriteStatus(position: Int, isFavourite: Boolean) {
             when(isFavourite) {
-                true -> viewModel.addToFavourites(position)
-                false -> viewModel.removeFromFavourites(position)
+                true -> viewModel.addFavorite(position)
+                false -> viewModel.removeFavorite(position)
             }
         }
     }
 
     override fun initView() {
-        characterLayoutManager = CharacterLayoutManager(requireContext(), characterAdapter)
-        characterAdapter.listener = characterAdapterListener
-        binding.recyclerCharacter.apply {
-            layoutManager = characterLayoutManager
-            adapter = characterAdapter
-            addOnScrollListener(scrollListener)
-            itemAnimator = null
-        }
-
-        binding.swipeRefresh.setOnRefreshListener(onRefreshListener)
+        setupRecycler()
+        setupSwipeRefresh()
+        setLoadingViewState()
     }
 
     override fun observe() {
-        viewModel.getFirstTimeCharacters()
-        viewModel.lastFetchedCharacters.observe(this, {
+        viewModel.init()
+        viewModel.characters.observe(this, {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
-                    with(it.data?.characters ?: listOf()) {
-                        if (this.isNotEmpty()) {
-                            setSuccessViewState(this)
-                            viewModel.updateCharacters(this)
+                    (it.data ?: listOf()).let { characters ->
+                        if (characters.isNotEmpty()) {
+                            setSuccessViewState(characters)
                         } else {
                             setEmptyState()
                         }
@@ -85,31 +78,41 @@ class CharactersFragment : BaseFragment<CharactersFragment, FragmentCharactersBi
             }
         })
 
-        viewModel.newFavouritePosition.observe(this, {
-            when (it.status) {
-                LiveDataStatusWrapper.Status.SUCCESS -> {
-                    val position = it.data ?: -1
-                    characterAdapter.updateFavourite(position, true)
-                }
-                else -> {}
+        viewModel.addedFavoritePosition.observe(this, { event ->
+            event.getContentIfNotHandled()?.let { position ->
+                viewModel.updateCharacterFavoriteStatus(position, true)
+                characterAdapter.updateFavourite(position, true)
             }
         })
 
-        viewModel.characterRemovedFromFavourites.observe(this, {
-            when (it.status) {
-                LiveDataStatusWrapper.Status.SUCCESS -> {
-                    val position = it.data ?: -1
-                    characterAdapter.updateFavourite(position, true)
-                }
-                else -> {}
+        viewModel.removedFavoritePosition.observe(this, { event ->
+            event.getContentIfNotHandled()?.let { position ->
+                viewModel.updateCharacterFavoriteStatus(position, false)
+                characterAdapter.updateFavourite(position, false)
             }
         })
+    }
+
+    private fun setupRecycler() {
+        characterLayoutManager = CharacterLayoutManager(requireContext(), characterAdapter)
+        characterAdapter.listener = characterAdapterListener
+        binding.recyclerCharacter.apply {
+            layoutManager = characterLayoutManager
+            adapter = characterAdapter
+            addOnScrollListener(scrollListener)
+            itemAnimator = null
+        }
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener(onRefreshListener)
     }
 
     private fun setLoadingViewState() {
         if (characterAdapter.isEmpty()) {
             binding.swipeRefresh.isRefreshing = true
             binding.recyclerCharacter.visibility = View.GONE
+            characterAdapter.isLoading = false
         } else {
             characterAdapter.isLoading = true
         }
