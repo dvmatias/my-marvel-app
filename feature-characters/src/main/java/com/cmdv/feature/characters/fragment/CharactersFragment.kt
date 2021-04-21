@@ -62,6 +62,7 @@ class CharactersFragment :
 
     override fun observe() {
         viewModel.init()
+
         viewModel.characters.observe(this, {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
@@ -80,15 +81,13 @@ class CharactersFragment :
 
         viewModel.addedFavoritePosition.observe(this, { event ->
             event.getContentIfNotHandled()?.let { position ->
-                viewModel.updateCharacterFavoriteStatus(position, true)
-                characterAdapter.updateFavourite(position, true)
+                handleFav(position, true)
             }
         })
 
         viewModel.removedFavoritePosition.observe(this, { event ->
             event.getContentIfNotHandled()?.let { position ->
-                viewModel.updateCharacterFavoriteStatus(position, false)
-                characterAdapter.updateFavourite(position, false)
+                handleFav(position, false)
             }
         })
     }
@@ -106,6 +105,11 @@ class CharactersFragment :
 
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setOnRefreshListener(onRefreshListener)
+    }
+
+    private fun handleFav(updatedPosition: Int, isFavorite: Boolean) {
+        viewModel.updateCharacterFavoriteStatus(updatedPosition, isFavorite)
+        characterAdapter.updateFavourite(updatedPosition, isFavorite)
     }
 
     private fun setLoadingViewState() {
