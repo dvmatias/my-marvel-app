@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/charactersFragment"
-        android:icon="@drawable/mock_character_img"
+        android:icon="@drawable/ic_bottom_nav_hero"
         android:title="Characters" />
     <item
         android:id="@+id/favouritesFragment"
-        android:icon="@drawable/mock_character_img"
+        android:icon="@drawable/ic_bottom_nav_favorite"
         android:title="Favourites" />
 </menu>

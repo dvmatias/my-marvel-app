@@ -2,9 +2,9 @@ package com.cmdv.feature.characters.fragment
 
 import com.cmdv.core.base.BaseFragment
 import com.cmdv.feature.characters.R
-import com.cmdv.feature.characters.databinding.FragmentFavouritesBinding
+import com.cmdv.feature.characters.databinding.FragmentFavoritesBinding
 
-class FavouritesFragment : BaseFragment<FavouritesFragment, FragmentFavouritesBinding>(R.layout.fragment_favourites) {
+class FavouritesFragment : BaseFragment<FavouritesFragment, FragmentFavoritesBinding>(R.layout.fragment_favorites) {
 
     override fun initView() {
         // TODO
