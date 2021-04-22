@@ -28,6 +28,11 @@
             android:name="com.cmdv.feature.characters.CharactersActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.CharactersActivity" />
+
+        <activity
+            android:name="com.cmdv.feature.characterdetails.CharacterDetailsActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.CharactersActivity"/>
     </application>
 
 </manifest>

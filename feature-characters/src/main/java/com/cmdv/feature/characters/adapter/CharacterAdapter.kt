@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.feature.characters.databinding.ItemCharacterBinding
+import com.cmdv.feature.characters.databinding.ItemHeaderBinding
 import com.cmdv.feature.characters.databinding.ItemLoadingBinding
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
 
 enum class ViewType(val viewType: Int) {
-    CHARACTER(0),
-    FOOTER_LOADING(1)
+    HEADER(0),
+    CHARACTER(1),
+    FOOTER_LOADING(2)
 }
 
 private const val ITEM_COUNT_BEFORE_LOAD_MORE = 6
@@ -34,10 +36,13 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun onScroll(lastVisibleItemPosition: Int) {
-        if (shouldLoadMore(lastVisibleItemPosition)) listener?.loadMore(charactersCount())
+        if (shouldLoadMore(lastVisibleItemPosition) && !isLoading) {
+            isLoading = true
+            listener?.onLoadMoreCharacters(charactersCount())
+        }
     }
 
-    fun isEmpty(): Boolean = itemCount == 1
+    fun isEmpty(): Boolean = itemCount == 2
 
     private fun shouldLoadMore(lastVisibleItemPosition: Int): Boolean =
         !isLoading && charactersCount() != 0 && charactersCount() <= lastVisibleItemPosition + ITEM_COUNT_BEFORE_LOAD_MORE
@@ -45,48 +50,51 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int =
         when (position) {
-            charactersCount() -> ViewType.FOOTER_LOADING.viewType
+            0 -> ViewType.HEADER.viewType
+            itemCount - 1 -> ViewType.FOOTER_LOADING.viewType
             else -> ViewType.CHARACTER.viewType
         }
 
-    private fun charactersCount() = itemCount - 1
+    private fun charactersCount() = itemCount - 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
+            ViewType.HEADER.viewType -> HeaderViewHolder(
+                ItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            )
             ViewType.CHARACTER.viewType -> CharacterViewHolder(
-                ItemCharacterBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
+                ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             ViewType.FOOTER_LOADING.viewType -> LoadingViewHolder(
-                ItemLoadingBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
+                ItemLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             else -> throw IllegalStateException("")
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            ViewType.CHARACTER.viewType -> (holder as CharacterViewHolder).bindItem(characters[position], listener, position)
+            ViewType.HEADER.viewType -> (holder as HeaderViewHolder)
+            ViewType.CHARACTER.viewType -> {
+                val characterPosition = position - 1
+                (holder as CharacterViewHolder).bindItem(characters[characterPosition], listener, characterPosition)
+            }
             ViewType.FOOTER_LOADING.viewType -> (holder as LoadingViewHolder).show(isLoading)
         }
 
     }
 
-    override fun getItemCount(): Int = this.characters.size + 1
+    override fun getItemCount(): Int = this.characters.size + 2
 
     fun updateFavourite(position: Int, isFavourite: Boolean) {
-        this.characters[position].isFavourite = isFavourite
-        notifyItemChanged(position)
+        val characterPosition = position + 1
+        this.characters[characterPosition].isFavourite = isFavourite
+        notifyItemChanged(characterPosition)
     }
 
-    class CharacterViewHolder(private val binding: ItemCharacterBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class HeaderViewHolder(private val binding: ItemHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+    }
+
+    class CharacterViewHolder(private val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(character: CharacterModel, listener: CharacterAdapterListener?, position: Int) {
             binding.character = character
             binding.listener = listener
@@ -94,8 +102,7 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    class LoadingViewHolder(private val binding: ItemLoadingBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class LoadingViewHolder(private val binding: ItemLoadingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun show(show: Boolean) {
             binding.root.visibility = if (show) View.VISIBLE else View.GONE
         }

@@ -1,19 +1,20 @@
 package com.cmdv.feature.characters
 
+import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
+import com.cmdv.common.KEY_CHARACTER_ID
 import com.cmdv.core.base.BaseActivity
 import com.cmdv.feature.characters.databinding.ActivityCharactersBinding
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
-import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import com.cmdv.feature.characters.listener.CharactersFragmentListener
 
-class CharactersActivity : BaseActivity<CharactersActivity, ActivityCharactersBinding>(R.layout.activity_characters) {
+class CharactersActivity :
+    BaseActivity<CharactersActivity, ActivityCharactersBinding>(R.layout.activity_characters),
+    CharactersFragmentListener {
 
     override fun initView() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         NavigationUI.setupWithNavController(
             binding.bottomNav,
             navHostFragment.navController
@@ -21,7 +22,11 @@ class CharactersActivity : BaseActivity<CharactersActivity, ActivityCharactersBi
     }
 
     override fun observe() {
-
     }
 
+    override fun onCharacterClick(characterId: Int) {
+        val bundle = Bundle()
+        bundle.putInt(KEY_CHARACTER_ID, characterId)
+        navigator.toCharacterDetails(this, bundle, false)
+    }
 }

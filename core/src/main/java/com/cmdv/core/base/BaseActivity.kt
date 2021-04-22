@@ -25,17 +25,18 @@ abstract class BaseActivity<in A, B>(
     abstract fun initView()
     protected abstract fun observe()
 
-    final override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         initialize()
     }
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initialize()
     }
 
     private fun initialize() {
+        getExtras()
         layoutResId?.let { id ->
             val dataBinder = DataBindingUtil.setContentView<B>(this, id)
             onActivityCreated(dataBinder)

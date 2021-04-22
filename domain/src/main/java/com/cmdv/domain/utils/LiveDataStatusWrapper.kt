@@ -1,6 +1,12 @@
 package com.cmdv.domain.utils
 
-class LiveDataStatusWrapper<out T>(val status: Status, val data: T?, val failureType: FailureType?) {
+import java.io.Serializable
+
+class LiveDataStatusWrapper<out T>(
+    val status: Status,
+    val data: T?,
+    val failureType: FailureType?
+) : Serializable {
 
     enum class Status {
         LOADING,

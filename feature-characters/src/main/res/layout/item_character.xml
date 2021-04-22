@@ -15,14 +15,14 @@
 
         <variable
             name="position"
-            type="Integer" />
+            type="int" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> listener != null ? listener.onCharacterClick(view, character.id) : Void}"
-        app:cardCornerRadius="@dimen/dim_8dp"
+        android:onClick="@{(view) -> listener != null ? listener.onCharacterClick(character.id) : Void}"
+        app:cardCornerRadius="@dimen/dim_4dp"
         app:cardElevation="3dp"
         app:cardUseCompatPadding="true">
 
@@ -48,9 +48,8 @@
                 android:layout_width="@dimen/dim_32dp"
                 android:layout_height="@dimen/dim_32dp"
                 android:padding="@dimen/dim_4dp"
-                android:layout_margin="@dimen/dim_8dp"
                 android:src="@{character.isFavourite ? @drawable/ic_favourite_selected : @drawable/ic_favourite_unselected}"
-                android:onClick="@{(view) -> listener != null ? listener.toggleFavouriteStatus(position, !character.isFavourite) : Void}"
+                android:onClick="@{(view) -> listener != null ? listener.onFavoriteClick(position, !character.isFavourite) : Void}"
                 android:contentDescription="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -60,13 +59,13 @@
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cereal_bold"
-                android:lines="1"
-                android:paddingStart="@dimen/dim_10dp"
-                android:paddingTop="@dimen/dim_8dp"
-                android:paddingEnd="@dimen/dim_10dp"
+                android:maxLines="2"
+                android:paddingStart="@dimen/dim_6dp"
+                android:paddingTop="@dimen/dim_4dp"
+                android:paddingEnd="@dimen/dim_6dp"
                 android:text="@{character.name}"
                 android:textColor="@color/text_color_title"
-                android:textSize="@dimen/text_16sp"
+                android:textSize="@dimen/text_14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageViewThumbnail"
@@ -78,12 +77,12 @@
                 android:layout_height="0dp"
                 android:fontFamily="@font/cereal_book"
                 android:includeFontPadding="false"
-                android:lineSpacingExtra="-1dp"
+                android:lineSpacingExtra="-3dp"
                 android:minHeight="@dimen/dim_24dp"
-                android:paddingStart="@dimen/dim_10dp"
-                android:paddingEnd="@dimen/dim_10dp"
+                android:paddingStart="@dimen/dim_6dp"
+                android:paddingEnd="@dimen/dim_6dp"
                 android:textColor="@color/text_color_subtitle"
-                android:textSize="@dimen/text_13sp"
+                android:textSize="@dimen/text_11sp"
                 app:characterItemDescription="@{character.description}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.2"
@@ -93,7 +92,7 @@
 
             <View
                 android:layout_width="@dimen/follow_constraints"
-                android:layout_height="@dimen/dim_20dp"
+                android:layout_height="@dimen/dim_18dp"
                 android:background="@drawable/shape_item_character_description_fade"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

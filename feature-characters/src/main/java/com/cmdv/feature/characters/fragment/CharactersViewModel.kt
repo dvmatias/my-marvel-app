@@ -13,7 +13,7 @@ import com.cmdv.domain.utils.LiveDataStatusWrapper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
-private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 21
+private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 32
 private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
 
 @InternalCoroutinesApi
@@ -70,7 +70,7 @@ class CharactersViewModel(
     ) {
         if (!isAllCharactersLoaded) {
             val params = GetCharactersUseCase.Params(limit, offset)
-            CoroutineScope(Dispatchers.Main.immediate).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 getCharactersUseCase(params).collect { statusWrapper ->
                     if (refresh) {
                         _characters.value = statusWrapper
@@ -85,7 +85,7 @@ class CharactersViewModel(
     fun addFavorite(position: Int) {
         getCharacter(position).let { character ->
             val params = AddFavoriteCharacterUseCase.Params(character, position)
-            CoroutineScope(Dispatchers.Main.immediate).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 addFavoriteCharacterUseCase(params).collect {
                     it.data?.let { event ->
                         _addedFavoritePosition.value = event
@@ -98,7 +98,7 @@ class CharactersViewModel(
     fun removeFavorite(position: Int) {
         getCharacter(position).let { character ->
             val params = RemoveFavoriteCharacterUseCase.Params(character, position)
-            CoroutineScope(Dispatchers.Main.immediate).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 removeFavoriteCharacterUseCase(params).collect {
                     it.data?.let { event ->
                         _removedFavoritePosition.value = event

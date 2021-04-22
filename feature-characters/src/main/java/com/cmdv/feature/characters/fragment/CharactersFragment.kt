@@ -2,7 +2,6 @@ package com.cmdv.feature.characters.fragment
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cmdv.core.base.BaseFragment
@@ -14,6 +13,7 @@ import com.cmdv.feature.characters.adapter.CharacterAdapter
 import com.cmdv.feature.characters.databinding.FragmentCharactersBinding
 import com.cmdv.feature.characters.layoutmanager.CharacterLayoutManager
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
+import com.cmdv.feature.characters.listener.CharactersFragmentListener
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
@@ -25,6 +25,7 @@ class CharactersFragment :
     private val viewModel: CharactersViewModel by stateViewModel()
     private val characterAdapter: CharacterAdapter by inject()
     private lateinit var characterLayoutManager: CharacterLayoutManager
+    private var fragmentListener: CharactersFragmentListener? = null
 
     private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
         viewModel.getCharacters(refresh = true)
@@ -38,16 +39,16 @@ class CharactersFragment :
     }
 
     private val characterAdapterListener = object : CharacterAdapterListener {
-        override fun loadMore(offset: Int) {
+        override fun onLoadMoreCharacters(offset: Int) {
             viewModel.getCharacters(offset = offset)
         }
 
-        override fun onCharacterClick(view: View, characterId: Int) {
-            Toast.makeText(requireContext(), "Click ID $characterId", Toast.LENGTH_SHORT).show()
+        override fun onCharacterClick(characterId: Int) {
+            fragmentListener?.onCharacterClick(characterId)
         }
 
-        override fun toggleFavouriteStatus(position: Int, isFavourite: Boolean) {
-            when(isFavourite) {
+        override fun onFavoriteClick(position: Int, isFavourite: Boolean) {
+            when (isFavourite) {
                 true -> viewModel.addFavorite(position)
                 false -> viewModel.removeFavorite(position)
             }
@@ -55,6 +56,9 @@ class CharactersFragment :
     }
 
     override fun initView() {
+        if (activity is CharactersFragmentListener) {
+            this.fragmentListener = activity as CharactersFragmentListener
+        }
         setupRecycler()
         setupSwipeRefresh()
         setLoadingViewState()
@@ -125,6 +129,7 @@ class CharactersFragment :
     private fun setSuccessViewState(characters: List<CharacterModel>) {
         characterAdapter.addItems(characters)
         binding.swipeRefresh.isRefreshing = false
+        characterAdapter.isLoading = false
         binding.recyclerCharacter.visibility = View.VISIBLE
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main">@color/marvel_red_100</color>
+    <color name="main">@color/marvel_black_100</color>
     <color name="mainDark">#AC2323</color>
     <color name="marvel_red_100">#e23636</color>
     <color name="marvel_red_80">#CCE23636</color>
@@ -12,7 +12,7 @@
     <color name="marvel_blue20">#33518CCA</color>
     <color name="marvel_orange">#f78f3f</color>
 
-    <color name="status_bar">@color/mainDark</color>
+    <color name="status_bar">@color/black_100</color>
 
     <color name="black_100">#FF000000</color>
     <color name="white_100">#FFFFFFFF</color>
