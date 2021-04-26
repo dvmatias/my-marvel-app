@@ -7,5 +7,5 @@ data class CharacterModel(
     val name: String,
     val description: String,
     val thumbnail: String,
-    var isFavourite: Boolean = false
+    var isFavourite: Boolean
 ) : Serializable

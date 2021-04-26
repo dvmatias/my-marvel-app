@@ -11,6 +11,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 
 val viewModelModule = module {
     viewModel { SplashViewModel() }
-    single { (handle: SavedStateHandle) -> CharactersViewModel(get(), get(), get(), get(), handle) }
+    viewModel { CharactersViewModel(get(), get(), get(), get()) }
     viewModel { FavoritesViewModel(get(), get(), get()) }
 }

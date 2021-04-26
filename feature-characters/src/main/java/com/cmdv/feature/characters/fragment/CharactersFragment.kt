@@ -16,19 +16,19 @@ import com.cmdv.feature.characters.listener.CharacterAdapterListener
 import com.cmdv.feature.characters.listener.CharactersFragmentListener
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @InternalCoroutinesApi
 @Suppress("EXPERIMENTAL_API_USAGE")
 class CharactersFragment :
     BaseFragment<CharactersFragment, FragmentCharactersBinding>(R.layout.fragment_characters) {
-    private val viewModel: CharactersViewModel by stateViewModel()
+    private val viewModel: CharactersViewModel by viewModel()
     private val characterAdapter: CharacterAdapter by inject()
     private lateinit var characterLayoutManager: CharacterLayoutManager
     private var fragmentListener: CharactersFragmentListener? = null
 
     private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        viewModel.getCharacters(refresh = true)
+        viewModel.getCharacters(loadMore = true)
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -40,7 +40,7 @@ class CharactersFragment :
 
     private val characterAdapterListener = object : CharacterAdapterListener {
         override fun onLoadMoreCharacters(offset: Int) {
-            viewModel.getCharacters(offset = offset)
+            viewModel.getCharacters(loadMore = true, offset = offset)
         }
 
         override fun onCharacterClick(characterId: Int) {

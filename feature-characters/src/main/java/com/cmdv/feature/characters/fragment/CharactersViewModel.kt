@@ -1,6 +1,9 @@
 package com.cmdv.feature.characters.fragment
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.cmdv.common.extensions.emit
 import com.cmdv.common.extensions.plusAssign
 import com.cmdv.domain.model.CharacterModel
@@ -16,23 +19,20 @@ import kotlinx.coroutines.flow.collect
 private const val LIMIT_CHARACTERS_FETCH_DEFAULT = 32
 private const val OFFSET_CHARACTERS_FETCH_DEFAULT = 0
 
-@InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 class CharactersViewModel(
     private val getTotalCharactersUseCase: GetTotalCharactersUseCase,
     private val getCharactersUseCase: GetCharactersUseCase,
     private val addFavoriteCharacterUseCase: AddFavoriteCharacterUseCase,
-    private val removeFavoriteCharacterUseCase: RemoveFavoriteCharacterUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val removeFavoriteCharacterUseCase: RemoveFavoriteCharacterUseCase
 ) : ViewModel() {
     private val isAllCharactersLoaded: Boolean
         get() = characters.value?.data?.size.let { totalCharactersCount == it }
 
-    private var totalCharactersCount: Int = savedStateHandle.get<Int>("TOTAL_CHARACTERS") ?: 0
+    private var totalCharactersCount: Int = 0
 
-    private val _characters: MutableLiveData<LiveDataStatusWrapper<ArrayList<CharacterModel>>> =
-        savedStateHandle.getLiveData("CHARACTERS")
-    val characters: LiveData<LiveDataStatusWrapper<ArrayList<CharacterModel>>>
+    private val _characters = MutableLiveData<LiveDataStatusWrapper<List<CharacterModel>>>()
+    val characters: LiveData<LiveDataStatusWrapper<List<CharacterModel>>>
         get() = _characters
 
     private val _addedFavoritePosition = MutableLiveData<Event<Int>>()
@@ -44,11 +44,7 @@ class CharactersViewModel(
         get() = _removedFavoritePosition
 
     fun init() {
-        if (savedStateHandle.get<Int>("TOTAL_CHARACTERS") == null) {
-            getTotalCharacters()
-        } else {
-            _characters.value = LiveDataStatusWrapper.success(characters.value?.data)
-        }
+        getCharacters(loadMore = false)
     }
 
     private fun getTotalCharacters() {
@@ -64,19 +60,15 @@ class CharactersViewModel(
     }
 
     fun getCharacters(
-        refresh: Boolean = false,
+        loadMore: Boolean = false,
         limit: Int = LIMIT_CHARACTERS_FETCH_DEFAULT,
         offset: Int = OFFSET_CHARACTERS_FETCH_DEFAULT
     ) {
         if (!isAllCharactersLoaded) {
-            val params = GetCharactersUseCase.Params(limit, offset)
+            val params = GetCharactersUseCase.Params(loadMore, limit, offset)
             CoroutineScope(Dispatchers.Main).launch {
                 getCharactersUseCase(params).collect { statusWrapper ->
-                    if (refresh) {
-                        _characters.value = statusWrapper
-                    } else {
-                        _characters.plusAssign(statusWrapper)
-                    }
+                    _characters.plusAssign(statusWrapper)
                 }
             }
         }
@@ -84,7 +76,7 @@ class CharactersViewModel(
 
     fun addFavorite(position: Int) {
         getCharacter(position).let { character ->
-            val params = AddFavoriteCharacterUseCase.Params(character, position)
+            val params = AddFavoriteCharacterUseCase.Params(character.id, position)
             CoroutineScope(Dispatchers.Main).launch {
                 addFavoriteCharacterUseCase(params).collect {
                     it.data?.let { event ->

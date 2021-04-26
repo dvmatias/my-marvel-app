@@ -15,7 +15,7 @@ class AddFavoriteCharacterUseCase(
 
     @ExperimentalCoroutinesApi
     override suspend fun run(params: Params): LiveDataStatusWrapper<Event<Int>> =
-        favoriteCharacterRepository.addFavorite(params.character, params.position)
+        favoriteCharacterRepository.addFavorite(params.characterId, params.position)
 
-    data class Params(val character: CharacterModel, val position: Int)
+    data class Params(val characterId: Int, val position: Int)
 }

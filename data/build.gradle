@@ -44,4 +44,7 @@ dependencies {
     implementation libs.retrofit
     implementation libs.retrofit_gson_converter
     implementation libs.gson
+    // Coroutines
+    implementation libs.coroutines_core
+    implementation libs.coroutines_android
 }

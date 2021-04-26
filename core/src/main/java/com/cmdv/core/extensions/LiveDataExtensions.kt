@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.cmdv.domain.utils.FailureType
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 
-fun <T> MutableLiveData<LiveDataStatusWrapper<ArrayList<T>>>.plusAssign(newValue: LiveDataStatusWrapper<List<T>>) {
+fun <T> MutableLiveData<LiveDataStatusWrapper<List<T>>>.plusAssign(newValue: LiveDataStatusWrapper<List<T>>) {
     val totalItems = arrayListOf<T>()
-    val oldItems: ArrayList<T> = this.value?.data ?: arrayListOf()
+    val oldItems: List<T> = this.value?.data ?: listOf()
     totalItems.addAll(oldItems)
     totalItems.addAll(newValue.data ?: arrayListOf())
 

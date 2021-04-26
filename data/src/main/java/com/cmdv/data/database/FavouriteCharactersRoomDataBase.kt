@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.cmdv.data.entity.FavouriteCharacterRoomEntity
-import com.cmdv.data.source.dao.FavouriteCharactersDao
+import com.cmdv.data.entity.FavoriteCharacterRoomEntity
+import com.cmdv.data.source.dao.FavoriteCharactersDao
 
-@Database(entities = [FavouriteCharacterRoomEntity::class], version = 3)
+@Database(entities = [FavoriteCharacterRoomEntity::class], version = 1)
 abstract class FavouriteCharactersRoomDataBase : RoomDatabase() {
-    abstract val favouriteCharactersDao: FavouriteCharactersDao
+    abstract val favoriteCharactersDao: FavoriteCharactersDao
 
     companion object {
         @Volatile
@@ -19,10 +19,12 @@ abstract class FavouriteCharactersRoomDataBase : RoomDatabase() {
             synchronized(this) {
                 var instance: FavouriteCharactersRoomDataBase? = INSTANCE
                 if (instance == null) {
-                    instance = Room.databaseBuilder(
+                    instance =
+                        Room.databaseBuilder(
                             context.applicationContext,
                             FavouriteCharactersRoomDataBase::class.java,
-                            "favourite-characters-room-database")
+                            "favourite-characters-room-database"
+                        )
                             .fallbackToDestructiveMigration()
                             .build()
                 }

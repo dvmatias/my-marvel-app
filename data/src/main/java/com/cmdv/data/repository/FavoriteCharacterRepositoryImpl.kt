@@ -1,44 +1,59 @@
 package com.cmdv.data.repository
 
+import com.cmdv.data.entity.FavoriteCharacterRoomEntity
 import com.cmdv.data.mapper.CharacterRoomMapper
-import com.cmdv.data.source.dao.FavouriteCharactersDao
+import com.cmdv.data.source.dao.CharactersDao
+import com.cmdv.data.source.dao.FavoriteCharactersDao
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.repository.FavoriteCharacterRepository
 import com.cmdv.domain.utils.Event
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 
 class FavoriteCharacterRepositoryImpl(
-    private val favouriteCharactersDao: FavouriteCharactersDao
+    private val charactersDao: CharactersDao,
+    private val favoriteCharactersDao: FavoriteCharactersDao
 ) : FavoriteCharacterRepository {
 
 
     override fun getFavorites(): LiveDataStatusWrapper<List<CharacterModel>> {
-        val characters = favouriteCharactersDao.getAll().map {
+        val favoriteCharacterIds = favoriteCharactersDao.getAll().map {
+            it.characterId
+        }
+        val favoriteCharacters = charactersDao.getById(favoriteCharacterIds).map {
             CharacterRoomMapper.transformEntityToModel(it)
         }
-        return LiveDataStatusWrapper.success(characters)
+        return LiveDataStatusWrapper.success(favoriteCharacters)
     }
 
     override fun addFavorite(
-        character: CharacterModel,
+        characterId: Int,
         position: Int
     ): LiveDataStatusWrapper<Event<Int>> {
-        val roomEntity = CharacterRoomMapper.transformModelToEntity(character)
-        favouriteCharactersDao.insert(roomEntity)
+        val roomEntity = FavoriteCharacterRoomEntity(null, characterId)
+        favoriteCharactersDao.insert(roomEntity)
+        updateModel()
         return LiveDataStatusWrapper.success(Event(position))
-
     }
 
     override fun removeFavorite(
         character: CharacterModel,
         position: Int
     ): LiveDataStatusWrapper<Event<Int>> {
-        favouriteCharactersDao.delete(character.id)
+        favoriteCharactersDao.delete(character.id)
+        updateModel()
         return LiveDataStatusWrapper.success(Event(position))
     }
 
     override fun removeAll(): LiveDataStatusWrapper<Event<Int>> {
-        favouriteCharactersDao.deleteAll()
+        favoriteCharactersDao.deleteAll()
+        updateModel()
         return LiveDataStatusWrapper.success(Event(1))
     }
+
+    private fun updateModel() = kotlin.run {
+        charactersDao.getAll().forEach {
+            it.isFavorite = favoriteCharactersDao.getById(it.characterId) != null
+        }
+    }
+
 }

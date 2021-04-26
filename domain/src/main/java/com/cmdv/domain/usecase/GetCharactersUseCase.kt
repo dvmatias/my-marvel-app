@@ -9,10 +9,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class GetCharactersUseCase(
     private val characterRepository: CharacterRepository
-) : BaseUseCase<LiveDataStatusWrapper<ArrayList<CharacterModel>>, GetCharactersUseCase.Params>() {
+) : BaseUseCase<LiveDataStatusWrapper<List<CharacterModel>>, GetCharactersUseCase.Params>() {
 
-    override suspend fun run(params: Params): LiveDataStatusWrapper<ArrayList<CharacterModel>> =
-        characterRepository.getCharacters(params.limit, params.offset)
+    override suspend fun run(params: Params): LiveDataStatusWrapper<List<CharacterModel>> =
+        characterRepository.getCharacters(params.loadMore, params.limit, params.offset)
 
-    data class Params(val limit: Int, val offset: Int)
+    data class Params(val loadMore: Boolean, val limit: Int, val offset: Int)
 }
