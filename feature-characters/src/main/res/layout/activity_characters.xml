@@ -22,6 +22,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/characters_nav_graph" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:layout_constraintBottom_toTopOf="@id/bottomNav"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/gradient_toolbar_shadow_bottom"/>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"

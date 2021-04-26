@@ -47,10 +47,10 @@ class CharactersFragment :
             fragmentListener?.onCharacterClick(characterId)
         }
 
-        override fun onFavoriteClick(position: Int, isFavourite: Boolean) {
+        override fun onFavoriteClick(characterIndex: Int, isFavourite: Boolean) {
             when (isFavourite) {
-                true -> viewModel.addFavorite(position)
-                false -> viewModel.removeFavorite(position)
+                true -> viewModel.addFavorite(characterIndex)
+                false -> viewModel.removeFavorite(characterIndex)
             }
         }
     }
@@ -74,7 +74,7 @@ class CharactersFragment :
                         if (characters.isNotEmpty()) {
                             setSuccessViewState(characters)
                         } else {
-                            setEmptyState()
+                            setEmptyViewState()
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class CharactersFragment :
         binding.recyclerCharacter.visibility = View.VISIBLE
     }
 
-    private fun setEmptyState() {
+    private fun setEmptyViewState() {
         // TODO
         Log.d(tag, "Empty State")
     }

@@ -5,5 +5,6 @@
     <string name="label_fragment_welcome_button_continue">continue...</string>
     <string name="label_fragment_welcome_button_start">start...</string>
 
+    <string name="text_item_header_choose_your_heroes">choose your heroes!</string>
     <string name="text_item_character_no_description">No description available</string>
 </resources>

@@ -9,13 +9,13 @@ import com.cmdv.domain.utils.LiveDataStatusWrapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class AddFavoriteCharacterUseCase(
+class RemoveAllFavoriteCharacterUseCase(
     private val favoriteCharacterRepository: FavoriteCharacterRepository
-) : BaseUseCase<LiveDataStatusWrapper<Event<Int>>, AddFavoriteCharacterUseCase.Params>() {
+) : BaseUseCase<LiveDataStatusWrapper<Event<Int>>, RemoveAllFavoriteCharacterUseCase.Params>() {
 
     @ExperimentalCoroutinesApi
     override suspend fun run(params: Params): LiveDataStatusWrapper<Event<Int>> =
-        favoriteCharacterRepository.addFavorite(params.character, params.position)
+        favoriteCharacterRepository.removeAll()
 
-    data class Params(val character: CharacterModel, val position: Int)
+    class Params
 }

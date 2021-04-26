@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
-        android:name="com.cmdv.feature.characters.fragment.FavouritesFragment"
+        android:name="com.cmdv.feature.characters.fragment.FavoritesFragment"
         android:label="FavouritesFragment" >
         <action
             android:id="@+id/action_favouritesFragment_to_charactersFragment"

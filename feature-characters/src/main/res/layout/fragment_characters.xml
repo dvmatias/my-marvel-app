@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/marvel_black_100"
+        android:background="@color/bgr_fragment"
         tools:context=".CharactersFragment">
 
         <include layout="@layout/characters_toolbar"/>
@@ -43,13 +43,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/gradient_toolbar_shadow_top"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/gradient_toolbar_shadow_bottom"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

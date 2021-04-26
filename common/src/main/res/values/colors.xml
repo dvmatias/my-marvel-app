@@ -25,4 +25,7 @@
     <color name="text_color_white">#FFFFFF</color>
     <color name="text_color_title">#151515</color>
     <color name="text_color_subtitle">#303030</color>
+
+    <color name="bgr_item_character">#2E2E2E</color>
+    <color name="bgr_fragment">@color/marvel_black_100</color>
 </resources>

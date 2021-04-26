@@ -4,17 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.cmdv.common.DETACHED_TO_ROOT
+import com.cmdv.core.extensions.addAllNoRepeated
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.feature.characters.databinding.ItemCharacterBinding
-import com.cmdv.feature.characters.databinding.ItemHeaderBinding
+import com.cmdv.feature.characters.databinding.ItemCharacterHeaderMainBinding
 import com.cmdv.feature.characters.databinding.ItemLoadingBinding
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
-
-enum class ViewType(val viewType: Int) {
-    HEADER(0),
-    CHARACTER(1),
-    FOOTER_LOADING(2)
-}
 
 private const val ITEM_COUNT_BEFORE_LOAD_MORE = 6
 
@@ -50,7 +46,7 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int =
         when (position) {
-            0 -> ViewType.HEADER.viewType
+            0 -> ViewType.HEADER_MAIN.viewType
             itemCount - 1 -> ViewType.FOOTER_LOADING.viewType
             else -> ViewType.CHARACTER.viewType
         }
@@ -59,24 +55,24 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
-            ViewType.HEADER.viewType -> HeaderViewHolder(
-                ItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewType.HEADER_MAIN.viewType -> HeaderViewHolder(
+                ItemCharacterHeaderMainBinding.inflate(LayoutInflater.from(parent.context), parent, DETACHED_TO_ROOT)
             )
             ViewType.CHARACTER.viewType -> CharacterViewHolder(
-                ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, DETACHED_TO_ROOT)
             )
             ViewType.FOOTER_LOADING.viewType -> LoadingViewHolder(
-                ItemLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ItemLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, DETACHED_TO_ROOT)
             )
             else -> throw IllegalStateException("")
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            ViewType.HEADER.viewType -> (holder as HeaderViewHolder)
+            ViewType.HEADER_MAIN.viewType -> (holder as HeaderViewHolder)
             ViewType.CHARACTER.viewType -> {
-                val characterPosition = position - 1
-                (holder as CharacterViewHolder).bindItem(characters[characterPosition], listener, characterPosition)
+                val characterIndex = position - 1
+                (holder as CharacterViewHolder).bindItem(characters[characterIndex], listener, characterIndex)
             }
             ViewType.FOOTER_LOADING.viewType -> (holder as LoadingViewHolder).show(isLoading)
         }
@@ -86,33 +82,23 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = this.characters.size + 2
 
     fun updateFavourite(position: Int, isFavourite: Boolean) {
-        val characterPosition = position + 1
-        this.characters[characterPosition].isFavourite = isFavourite
-        notifyItemChanged(characterPosition)
+        this.characters[position].isFavourite = isFavourite
+        notifyItemChanged(position + 1)
     }
 
-    class HeaderViewHolder(private val binding: ItemHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-    }
+    class HeaderViewHolder(val binding: ItemCharacterHeaderMainBinding) : RecyclerView.ViewHolder(binding.root)
 
     class CharacterViewHolder(private val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(character: CharacterModel, listener: CharacterAdapterListener?, position: Int) {
+        fun bindItem(character: CharacterModel, listener: CharacterAdapterListener?, characterIndex: Int) {
             binding.character = character
             binding.listener = listener
-            binding.position = position
+            binding.characterIndex = characterIndex
         }
     }
 
     class LoadingViewHolder(private val binding: ItemLoadingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun show(show: Boolean) {
             binding.root.visibility = if (show) View.VISIBLE else View.GONE
-        }
-    }
-}
-
-fun <T> ArrayList<T>.addAllNoRepeated(newElements: List<T>) {
-    newElements.forEach { newElement ->
-        if (!this.contains(newElement)) {
-            this.add(newElement)
         }
     }
 }

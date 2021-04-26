@@ -4,9 +4,7 @@ import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.utils.Event
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 
-interface CharactersRepository {
+interface CharacterRepository {
     fun getTotalCharacters(): LiveDataStatusWrapper<Int>
     fun getCharacters(limit: Int, offset: Int): LiveDataStatusWrapper<ArrayList<CharacterModel>>
-    fun addFavourite(character: CharacterModel, position: Int): LiveDataStatusWrapper<Event<Int>>
-    fun removeFavourite(character: CharacterModel, position: Int): LiveDataStatusWrapper<Event<Int>>
 }

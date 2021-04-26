@@ -1,11 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.FavouritesFragment">
+        android:background="@color/bgr_fragment"
+        tools:context=".fragment.FavoritesFragment">
 
+        <include
+            android:id="@+id/favoritesToolbar"
+            layout="@layout/favorites_toolbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerIndexFavoriteCharacter"
+            android:layout_width="@dimen/follow_constraints"
+            android:layout_height="@dimen/follow_constraints"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/favoritesToolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_index_favorite_character" />
+
+        <!-- LOADING STATE -->
+        <FrameLayout
+            android:id="@+id/progressBar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/favoritesToolbar">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:elevation="8dp"
+                android:indeterminateDrawable="@drawable/layer_list_characters_loading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </FrameLayout>
+
+        <!-- EMPTY STATE -->
+        <ImageView
+            android:id="@+id/imageViewEmptyState"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/follow_constraints"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/favoritesToolbar" />
+
+        <!-- TOP SHADOW -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/gradient_toolbar_shadow_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/favoritesToolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

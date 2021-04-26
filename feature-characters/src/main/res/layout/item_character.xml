@@ -14,7 +14,7 @@
             type="com.cmdv.feature.characters.listener.CharacterAdapterListener" />
 
         <variable
-            name="position"
+            name="characterIndex"
             type="int" />
     </data>
 
@@ -24,17 +24,18 @@
         android:onClick="@{(view) -> listener != null ? listener.onCharacterClick(character.id) : Void}"
         app:cardCornerRadius="@dimen/dim_4dp"
         app:cardElevation="3dp"
+        app:cardBackgroundColor="@color/bgr_item_character"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageViewThumbnail"
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="@dimen/follow_constraints"
-                android:background="@android:color/background_light"
+                android:background="@android:color/transparent"
                 android:contentDescription="@null"
                 app:image="@{character.thumbnail}"
                 app:layout_constraintDimensionRatio="1:1"
@@ -47,25 +48,29 @@
                 android:id="@+id/imageViewFavourite"
                 android:layout_width="@dimen/dim_32dp"
                 android:layout_height="@dimen/dim_32dp"
-                android:padding="@dimen/dim_4dp"
-                android:src="@{character.isFavourite ? @drawable/ic_favourite_selected : @drawable/ic_favourite_unselected}"
-                android:onClick="@{(view) -> listener != null ? listener.onFavoriteClick(position, !character.isFavourite) : Void}"
                 android:contentDescription="@null"
+                android:onClick="@{(view) -> listener != null ? listener.onFavoriteClick(characterIndex, !character.isFavourite) : Void}"
+                android:padding="@dimen/dim_6dp"
+                android:src="@{character.isFavourite ? @drawable/ic_favourite_selected : @drawable/ic_favourite_unselected}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewName"
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cereal_bold"
-                android:maxLines="2"
+                android:lines="2"
+                android:gravity="center_vertical"
+                android:ellipsize="end"
                 android:paddingStart="@dimen/dim_6dp"
                 android:paddingTop="@dimen/dim_4dp"
+                android:paddingBottom="@dimen/dim_4dp"
                 android:paddingEnd="@dimen/dim_6dp"
                 android:text="@{character.name}"
-                android:textColor="@color/text_color_title"
-                android:textSize="@dimen/text_14sp"
+                android:textColor="@{character.isFavourite ? @color/text_color_white : @color/text_color_white}"
+                android:background="@{character.isFavourite ? @color/marvel_red_100 : @android:color/transparent}"
+                android:textSize="@dimen/text_13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageViewThumbnail"
@@ -74,25 +79,26 @@
             <TextView
                 android:id="@+id/textViewDescription"
                 android:layout_width="@dimen/follow_constraints"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/cereal_book"
                 android:includeFontPadding="false"
                 android:lineSpacingExtra="-3dp"
-                android:minHeight="@dimen/dim_24dp"
+                android:lines="3"
+                android:ellipsize="end"
                 android:paddingStart="@dimen/dim_6dp"
                 android:paddingEnd="@dimen/dim_6dp"
-                android:textColor="@color/text_color_subtitle"
+                android:textColor="@color/white_100"
                 android:textSize="@dimen/text_11sp"
                 app:characterItemDescription="@{character.description}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textViewName"
                 tools:text="Description. Lorem ipsum dolor sato sit amet lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
 
             <View
                 android:layout_width="@dimen/follow_constraints"
-                android:layout_height="@dimen/dim_18dp"
+                android:layout_height="@dimen/dim_12dp"
                 android:background="@drawable/shape_item_character_description_fade"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
