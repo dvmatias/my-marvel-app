@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.cmdv.data.entity.FavoriteCharacterRoomEntity
 import com.cmdv.data.source.dao.FavoriteCharactersDao
 
-@Database(entities = [FavoriteCharacterRoomEntity::class], version = 1)
+@Database(entities = [FavoriteCharacterRoomEntity::class], version = 2)
 abstract class FavouriteCharactersRoomDataBase : RoomDatabase() {
     abstract val favoriteCharactersDao: FavoriteCharactersDao
 

@@ -1,5 +1,6 @@
 package com.cmdv.feature.characters.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val startIndex = itemCount
         this.characters.addAllNoRepeated(characters)
         isLoading = false
-        notifyItemRangeChanged(startIndex, itemCount)
+        notifyItemRangeChanged(startIndex, characters.size)
     }
 
     fun onScroll(lastVisibleItemPosition: Int) {
@@ -82,7 +83,9 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = this.characters.size + 2
 
     fun updateFavourite(position: Int, isFavourite: Boolean) {
+        Log.d("Shit!", "updateFavourite(position: $position, isFavourite: $isFavourite)")
         this.characters[position].isFavourite = isFavourite
+        Log.d("Shit!", "characterId = ${this.characters[position].id}")
         notifyItemChanged(position + 1)
     }
 

@@ -62,7 +62,7 @@
         <!-- TOP SHADOW -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="@dimen/main_shadow_height"
             android:background="@drawable/gradient_toolbar_shadow_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

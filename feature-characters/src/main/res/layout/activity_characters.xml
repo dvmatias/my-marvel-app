@@ -24,7 +24,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="@dimen/main_shadow_height"
             app:layout_constraintBottom_toTopOf="@id/bottomNav"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/bottom_nav_view_height"
             android:background="@color/main"
             app:itemIconTint="@drawable/selector_characters_bottom_nav"
             app:itemTextColor="@drawable/selector_characters_bottom_nav"

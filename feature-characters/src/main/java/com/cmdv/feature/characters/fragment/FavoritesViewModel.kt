@@ -54,19 +54,6 @@ class FavoritesViewModel(
         }
     }
 
-    fun removeFavoriteCharacter(position: Int) {
-        viewModelScope.launch {
-            getCharacter(position).let { character ->
-                val params = RemoveFavoriteCharacterUseCase.Params(character, position)
-                removeFavoriteCharacterUseCase(params).collect {
-                    if (it.status == LiveDataStatusWrapper.Status.SUCCESS) {
-                        getFavoritesCharacters()
-                    }
-                }
-            }
-        }
-    }
-
     private fun getCharacter(position: Int): CharacterModel =
         favoriteCharacters.value?.data?.get(position) ?: throw IllegalStateException("")
 

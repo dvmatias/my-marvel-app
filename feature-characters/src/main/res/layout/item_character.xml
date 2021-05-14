@@ -49,7 +49,7 @@
                 android:layout_width="@dimen/dim_32dp"
                 android:layout_height="@dimen/dim_32dp"
                 android:contentDescription="@null"
-                android:onClick="@{(view) -> listener != null ? listener.onFavoriteClick(characterIndex, !character.isFavourite) : Void}"
+                android:onClick="@{(view) -> listener != null ? listener.onFavoriteClick(character.id, characterIndex, !character.isFavourite) : Void}"
                 android:padding="@dimen/dim_6dp"
                 android:src="@{character.isFavourite ? @drawable/ic_favourite_selected : @drawable/ic_favourite_unselected}"
                 app:layout_constraintEnd_toEndOf="parent"

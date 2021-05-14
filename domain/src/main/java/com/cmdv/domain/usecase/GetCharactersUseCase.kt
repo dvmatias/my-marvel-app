@@ -12,7 +12,7 @@ class GetCharactersUseCase(
 ) : BaseUseCase<LiveDataStatusWrapper<List<CharacterModel>>, GetCharactersUseCase.Params>() {
 
     override suspend fun run(params: Params): LiveDataStatusWrapper<List<CharacterModel>> =
-        characterRepository.getCharacters(params.loadMore, params.limit, params.offset)
+        characterRepository.getCharacters(params.fetch, params.limit, params.offset)
 
-    data class Params(val loadMore: Boolean, val limit: Int, val offset: Int)
+    data class Params(val fetch: Boolean, val limit: Int, val offset: Int)
 }

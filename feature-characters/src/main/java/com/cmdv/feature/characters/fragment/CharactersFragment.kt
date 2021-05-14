@@ -28,7 +28,7 @@ class CharactersFragment :
     private var fragmentListener: CharactersFragmentListener? = null
 
     private val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        viewModel.getCharacters(loadMore = true)
+        viewModel.getCharacters(fetch = false)
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -40,17 +40,19 @@ class CharactersFragment :
 
     private val characterAdapterListener = object : CharacterAdapterListener {
         override fun onLoadMoreCharacters(offset: Int) {
-            viewModel.getCharacters(loadMore = true, offset = offset)
+            Log.d("Shit!", "onLoadMoreCharacters(offset: $offset)")
+            viewModel.getCharacters(fetch = true, offset = offset)
         }
 
         override fun onCharacterClick(characterId: Int) {
             fragmentListener?.onCharacterClick(characterId)
         }
 
-        override fun onFavoriteClick(characterIndex: Int, isFavourite: Boolean) {
+        override fun onFavoriteClick(characterId: Int, characterIndex: Int, isFavourite: Boolean) {
+            Log.d("Shit!", "onFavoriteClick(characterIndex: $characterIndex, isFavourite: $isFavourite)")
             when (isFavourite) {
-                true -> viewModel.addFavorite(characterIndex)
-                false -> viewModel.removeFavorite(characterIndex)
+                true -> viewModel.addFavorite(characterId, characterIndex)
+                false -> viewModel.removeFavorite(characterId, characterIndex)
             }
         }
     }
@@ -67,7 +69,7 @@ class CharactersFragment :
     override fun observe() {
         viewModel.init()
 
-        viewModel.characters.observe(this, {
+        viewModel.characters.origianl.observe(this, {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
                     (it.data ?: listOf()).let { characters ->
@@ -112,7 +114,6 @@ class CharactersFragment :
     }
 
     private fun handleFav(updatedPosition: Int, isFavorite: Boolean) {
-        viewModel.updateCharacterFavoriteStatus(updatedPosition, isFavorite)
         characterAdapter.updateFavourite(updatedPosition, isFavorite)
     }
 

@@ -16,13 +16,18 @@
 
         <TextView
             android:id="@+id/textViewIndex"
-            android:layout_width="@dimen/follow_constraints"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ff9800"
             android:text="@{item.index}"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/text_32sp"
+            android:lines="1"
+            android:textColor="@color/white_100"
+            android:layout_marginStart="@dimen/dim_16dp"
+            android:fontFamily="@font/comic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="@dimen/dim_12dp"
+            android:paddingBottom="@dimen/dim_8dp"
             tools:text="A" />
 
         <androidx.recyclerview.widget.RecyclerView

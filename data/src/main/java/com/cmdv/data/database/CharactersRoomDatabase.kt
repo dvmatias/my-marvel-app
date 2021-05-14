@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.cmdv.data.entity.CharacterRoomEntity
 import com.cmdv.data.source.dao.CharactersDao
 
-@Database(entities = [ CharacterRoomEntity::class], version = 1)
+@Database(entities = [ CharacterRoomEntity::class], version = 2)
 abstract class CharactersRoomDatabase : RoomDatabase() {
     abstract val charactersDao: CharactersDao
 

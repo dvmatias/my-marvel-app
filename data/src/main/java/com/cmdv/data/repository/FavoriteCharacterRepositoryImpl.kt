@@ -1,5 +1,6 @@
 package com.cmdv.data.repository
 
+import android.util.Log
 import com.cmdv.data.entity.FavoriteCharacterRoomEntity
 import com.cmdv.data.mapper.CharacterRoomMapper
 import com.cmdv.data.source.dao.CharactersDao
@@ -30,16 +31,17 @@ class FavoriteCharacterRepositoryImpl(
         position: Int
     ): LiveDataStatusWrapper<Event<Int>> {
         val roomEntity = FavoriteCharacterRoomEntity(null, characterId)
+        Log.d("Shit! Repository", "addFavorite(characterId: $characterId, position: $position)")
         favoriteCharactersDao.insert(roomEntity)
         updateModel()
         return LiveDataStatusWrapper.success(Event(position))
     }
 
     override fun removeFavorite(
-        character: CharacterModel,
+        characterId: Int,
         position: Int
     ): LiveDataStatusWrapper<Event<Int>> {
-        favoriteCharactersDao.delete(character.id)
+        favoriteCharactersDao.delete(characterId)
         updateModel()
         return LiveDataStatusWrapper.success(Event(position))
     }
@@ -51,8 +53,12 @@ class FavoriteCharacterRepositoryImpl(
     }
 
     private fun updateModel() = kotlin.run {
+        Log.d("Shit! Repository", "updateModel()")
         charactersDao.getAll().forEach {
             it.isFavorite = favoriteCharactersDao.getById(it.characterId) != null
+            if (it.isFavorite) {
+                Log.d("Shit! Repository", "${it.characterId} is Favorite")
+            }
         }
     }
 

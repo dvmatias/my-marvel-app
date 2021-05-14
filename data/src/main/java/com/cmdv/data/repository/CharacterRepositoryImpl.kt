@@ -26,23 +26,27 @@ class CharacterRepositoryImpl(
     }
 
     override fun getCharacters(
-        loadMore: Boolean,
+        fetch: Boolean,
         limit: Int,
         offset: Int
     ): LiveDataStatusWrapper<List<CharacterModel>> = runBlocking {
         val storedCharacters = getAll()
-        if (loadMore || storedCharacters.isEmpty()) {
-            fetchAndStore(limit, offset)
+
+        if (fetch || storedCharacters.isEmpty()) {
+            fetchCharacters(limit, offset).let {
+                it.data?.let { data -> store(data) }
+                it
+            }
+        } else {
+            LiveDataStatusWrapper.success(storedCharacters)
         }
-        LiveDataStatusWrapper.success(getAll())
     }
 
-    private fun fetchAndStore(limit: Int, offset: Int) {
+    private fun fetchCharacters(limit: Int, offset: Int): LiveDataStatusWrapper<ArrayList<CharacterModel>> =
         doNetworkRequest(charactersApi.getCharacters(limit, offset)) { response ->
-            val characters = GetCharactersResponseMapper.transformEntityToModel(response).characters
-            store(characters)
+            GetCharactersResponseMapper.transformEntityToModel(response).characters
         }
-    }
+
 
     private fun getAll(): List<CharacterModel> =
         charactersDao.getAll().map {

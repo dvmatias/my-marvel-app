@@ -10,6 +10,7 @@ import com.cmdv.domain.utils.LiveDataStatusWrapper.Status
 import com.cmdv.feature.characters.R
 import com.cmdv.feature.characters.adapter.IndexFavoriteCharacterAdapter
 import com.cmdv.feature.characters.databinding.FragmentFavoritesBinding
+import com.cmdv.feature.characters.itemdecorator.IndexFavoriteCharacterDecorator
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,6 +53,7 @@ class FavoritesFragment :
         binding.recyclerIndexFavoriteCharacter.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = indexFavoriteCharacterAdapter
+            addItemDecoration(IndexFavoriteCharacterDecorator())
         }
     }
 
