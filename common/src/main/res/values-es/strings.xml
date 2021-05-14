@@ -7,4 +7,9 @@
 
     <string name="text_item_header_choose_your_heroes">¡elige tus héroes!</string>
     <string name="text_item_character_no_description">Sin descripicón</string>
+
+    <string name="title_delete_all_favorites_dialog">Eliminar Favoritos</string>
+    <string name="message_delete_all_favorites_dialog">Estas a punto de eliminar todos tus personajes favoritos. Esto no podrá desacerse luego ¿Estás seguro?</string>
+    <string name="label_delete_all_favorites_label_positive">si, borralos</string>
+    <string name="label_delete_all_favorites_label_negative">salir</string>
 </resources>

@@ -4,6 +4,7 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cmdv.common.components.dialog.CustomDialog
 import com.cmdv.core.base.BaseFragment
 import com.cmdv.domain.model.CharacterModel
 import com.cmdv.domain.utils.LiveDataStatusWrapper.Status
@@ -24,7 +25,21 @@ class FavoritesFragment :
     override fun initView() {
         setupRecycler()
         binding.favoritesToolbar.imageViewDeleteFavoritesButton.setOnClickListener {
-            viewModel.removeAll()
+            CustomDialog.build(requireActivity().supportFragmentManager, requireContext()) {
+                ContextCompat.getDrawable(requireContext(), R.drawable.mock_character_img)
+                    ?.let { setIcon(it) }
+                setTitle(getString(R.string.title_delete_all_favorites_dialog))
+                setMessage(getString(R.string.message_delete_all_favorites_dialog))
+                setPositiveButton(getString(R.string.label_delete_all_favorites_label_positive)) { dialog, _ ->
+                    dialog.dismiss()
+                    viewModel.removeAll()
+                }
+                setNegativeButton(getString(R.string.label_delete_all_favorites_label_negative)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+            }.also {
+                it.isCancelable = true
+            }.show()
         }
     }
 
@@ -41,7 +56,7 @@ class FavoritesFragment :
             }
         })
 
-        viewModel.removeAll.observe(this, {event ->
+        viewModel.removeAll.observe(this, { event ->
             event.getContentIfNotHandled()?.let {
                 viewModel.getFavoritesCharacters()
             }

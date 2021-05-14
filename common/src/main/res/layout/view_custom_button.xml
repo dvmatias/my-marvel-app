@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_button_height"
+            android:background="@drawable/selector_custom_button_primary_background"
+            android:textAllCaps="true"
+            android:textAppearance="@style/ButtonText.Primary"
+            android:textColor="@color/text_color_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="@dimen/dim_1dp"
+            android:translationZ="@dimen/dim_1dp"
+            android:layout_margin="@dimen/dim_6dp"
+            tools:text="test">
+
+        </Button>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

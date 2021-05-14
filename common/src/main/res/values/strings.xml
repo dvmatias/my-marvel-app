@@ -7,4 +7,9 @@
 
     <string name="text_item_header_choose_your_heroes">choose your heroes!</string>
     <string name="text_item_character_no_description">No description available</string>
+
+    <string name="title_delete_all_favorites_dialog">Delete Favorites</string>
+    <string name="message_delete_all_favorites_dialog">You\'re about to delete all your favorite characters. This action can\'t de undone. Are you sure?</string>
+    <string name="label_delete_all_favorites_label_positive">I am sure</string>
+    <string name="label_delete_all_favorites_label_negative">exit</string>
 </resources>
