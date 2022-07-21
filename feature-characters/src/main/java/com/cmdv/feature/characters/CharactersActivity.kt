@@ -1,12 +1,14 @@
 package com.cmdv.feature.characters
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.cmdv.common.KEY_CHARACTER_ID
 import com.cmdv.core.base.BaseActivity
 import com.cmdv.feature.characters.databinding.ActivityCharactersBinding
 import com.cmdv.feature.characters.listener.CharactersFragmentListener
+import com.google.android.material.snackbar.Snackbar
 
 class CharactersActivity :
     BaseActivity<CharactersActivity, ActivityCharactersBinding>(R.layout.activity_characters),
@@ -28,5 +30,11 @@ class CharactersActivity :
         val bundle = Bundle()
         bundle.putInt(KEY_CHARACTER_ID, characterId)
         navigator.toCharacterDetails(this, bundle, false)
+    }
+
+    override fun showErrorSnackBar(message: String) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(ContextCompat.getColor(this, R.color.marvel_orange))
+            .show()
     }
 }

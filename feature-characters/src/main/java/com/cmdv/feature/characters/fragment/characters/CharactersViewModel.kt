@@ -1,4 +1,4 @@
-package com.cmdv.feature.characters.fragment
+package com.cmdv.feature.characters.fragment.characters
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +12,7 @@ import com.cmdv.domain.usecase.RemoveFavoriteCharacterUseCase
 import com.cmdv.domain.utils.Event
 import com.cmdv.domain.utils.LiveDataStatusWrapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -26,11 +27,12 @@ class CharactersViewModel(
     private val removeFavoriteCharacterUseCase: RemoveFavoriteCharacterUseCase
 ) : ViewModel() {
     private val isAllCharactersLoaded: Boolean
-        get() = characters.origianl.value?.data?.size.let { totalCharactersCount == it }
+        get() = _characters.value?.data?.size.let { totalCharactersCount == it }
 
     private var totalCharactersCount: Int = 0
 
-    val characters = ObservableDataStatus<List<CharacterModel>>()
+    private var _characters = MutableLiveData<LiveDataStatusWrapper<List<CharacterModel>>>()
+    val characters: LiveData<LiveDataStatusWrapper<List<CharacterModel>>> = _characters
 
     private val _addedFavoritePosition = MutableLiveData<Event<Int>>()
     val addedFavoritePosition: LiveData<Event<Int>>
@@ -65,7 +67,8 @@ class CharactersViewModel(
             val params = GetCharactersUseCase.Params(fetch, limit, offset)
             viewModelScope.launch {
                 getCharactersUseCase(params).collect { statusWrapper ->
-                    characters.set(statusWrapper)
+                    delay(300)
+                    _characters.value  = statusWrapper
                 }
             }
         }
@@ -91,25 +94,5 @@ class CharactersViewModel(
                 }
             }
         }
-    }
-}
-
-class ObservableDataStatus<M> {
-    private val _shadow = MutableLiveData<LiveDataStatusWrapper<M>>()
-    val origianl: LiveData<LiveDataStatusWrapper<M>>
-        get() = _shadow
-
-    fun set(value: LiveDataStatusWrapper<M>) {
-        _shadow.value = value
-    }
-}
-
-class ObservableDataEvent<M> {
-    private val _shadow = MutableLiveData<Event<M>>()
-    val origianl: LiveData<Event<M>>
-        get() = _shadow
-
-    fun set(value: Event<M>) {
-        _shadow.value = value
     }
 }

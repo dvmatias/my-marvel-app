@@ -1,4 +1,4 @@
-package com.cmdv.feature.characters.fragment
+package com.cmdv.feature.characters.fragment.characters
 
 import android.util.Log
 import android.view.View
@@ -14,12 +14,13 @@ import com.cmdv.feature.characters.databinding.FragmentCharactersBinding
 import com.cmdv.feature.characters.layoutmanager.CharacterLayoutManager
 import com.cmdv.feature.characters.listener.CharacterAdapterListener
 import com.cmdv.feature.characters.listener.CharactersFragmentListener
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @InternalCoroutinesApi
-@Suppress("EXPERIMENTAL_API_USAGE")
 class CharactersFragment :
     BaseFragment<CharactersFragment, FragmentCharactersBinding>(R.layout.fragment_characters) {
     private val viewModel: CharactersViewModel by viewModel()
@@ -61,6 +62,7 @@ class CharactersFragment :
         if (activity is CharactersFragmentListener) {
             this.fragmentListener = activity as CharactersFragmentListener
         }
+        binding.viewModel = viewModel
         setupRecycler()
         setupSwipeRefresh()
         setLoadingViewState()
@@ -69,7 +71,7 @@ class CharactersFragment :
     override fun observe() {
         viewModel.init()
 
-        viewModel.characters.origianl.observe(this, {
+        viewModel.characters.observe(this) {
             when (it.status) {
                 LiveDataStatusWrapper.Status.SUCCESS -> {
                     (it.data ?: listOf()).let { characters ->
@@ -83,19 +85,19 @@ class CharactersFragment :
                 LiveDataStatusWrapper.Status.LOADING -> setLoadingViewState()
                 LiveDataStatusWrapper.Status.ERROR -> setErrorViewState(it.failureType)
             }
-        })
+        }
 
-        viewModel.addedFavoritePosition.observe(this, { event ->
+        viewModel.addedFavoritePosition.observe(this) { event ->
             event.getContentIfNotHandled()?.let { position ->
                 handleFav(position, true)
             }
-        })
+        }
 
-        viewModel.removedFavoritePosition.observe(this, { event ->
+        viewModel.removedFavoritePosition.observe(this) { event ->
             event.getContentIfNotHandled()?.let { position ->
                 handleFav(position, false)
             }
-        })
+        }
     }
 
     private fun setupRecycler() {
@@ -118,6 +120,7 @@ class CharactersFragment :
     }
 
     private fun setLoadingViewState() {
+        Log.d("Shit!", "Loading State")
         if (characterAdapter.isEmpty()) {
             binding.swipeRefresh.isRefreshing = true
             binding.recyclerCharacter.visibility = View.GONE
@@ -128,6 +131,7 @@ class CharactersFragment :
     }
 
     private fun setSuccessViewState(characters: List<CharacterModel>) {
+        Log.d("Shit!", "Success State!")
         characterAdapter.addItems(characters)
         binding.swipeRefresh.isRefreshing = false
         characterAdapter.isLoading = false
@@ -136,11 +140,14 @@ class CharactersFragment :
 
     private fun setEmptyViewState() {
         // TODO
-        Log.d(tag, "Empty State")
+        Log.d("Shit!", "Empty State")
+        characterAdapter.isLoading = false
     }
 
     private fun setErrorViewState(failureType: FailureType?) {
-        // TODO
-        Log.d(tag, "Failure State")
+        Log.d("Shit!", "Error State!")
+        binding.swipeRefresh.isRefreshing = false
+        characterAdapter.isLoading = false
+        fragmentListener?.showErrorSnackBar("Something went wrong. Check your Internet connection.")
     }
 }

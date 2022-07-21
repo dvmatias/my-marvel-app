@@ -1,4 +1,4 @@
-package com.cmdv.feature.characters.fragment
+package com.cmdv.feature.characters.fragment.favorites
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

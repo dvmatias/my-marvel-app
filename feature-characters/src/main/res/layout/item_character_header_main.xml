@@ -31,7 +31,7 @@
             android:textColor="@color/text_color_white"
             android:gravity="center"
             android:layout_marginBottom="@dimen/dim_12dp"
-            android:textSize="@dimen/text_32sp"
+            android:textSize="@dimen/text_24sp"
             android:fontFamily="@font/comic"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

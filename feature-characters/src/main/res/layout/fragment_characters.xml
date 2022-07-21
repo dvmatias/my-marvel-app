@@ -6,10 +6,11 @@
     <data>
         <variable
             name="viewModel"
-            type="com.cmdv.feature.characters.fragment.CharactersViewModel" />
+            type="com.cmdv.feature.characters.fragment.characters.CharactersViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bgr_fragment"

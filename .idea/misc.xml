@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/common/src/main/res/drawable/animated_empty_state_spider_man.xml" value="0.1195" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/common/src/main/res/layout/fragment_custom_dialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/common/src/main/res/layout/view_custom_button.xml" value="0.36666666666666664" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/feature-characters/src/main/res/layout/activity_characters.xml" value="0.1" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/feature-characters/src/main/res/layout/fragment_characters.xml" value="0.2962962962962963" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/feature-splash/src/main/res/layout/fragment_app_details.xml" value="0.18802083333333333" />
+        <entry key="..\:/Backup/StudioProjects/MyMarvelApp/feature-splash/src/main/res/layout/fragment_app_welcome.xml" value="0.2740740740740741" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

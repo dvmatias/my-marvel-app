@@ -21,20 +21,20 @@ class CharacterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     internal var isLoading = true
         set(value) {
             field = value
-            notifyItemChanged(charactersCount())
+            notifyItemChanged(itemCount-1)
         }
     internal var listener: CharacterAdapterListener? = null
 
     fun addItems(characters: List<CharacterModel>) {
         val startIndex = itemCount
         this.characters.addAllNoRepeated(characters)
-        isLoading = false
         notifyItemRangeChanged(startIndex, characters.size)
     }
 
     fun onScroll(lastVisibleItemPosition: Int) {
         if (shouldLoadMore(lastVisibleItemPosition) && !isLoading) {
             isLoading = true
+            Log.d("Shit!", "onScroll load more")
             listener?.onLoadMoreCharacters(charactersCount())
         }
     }

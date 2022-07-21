@@ -1,5 +1,6 @@
 package com.cmdv.data.repository
 
+import com.cmdv.data.mapper.CharacterMapper
 import com.cmdv.data.mapper.CharacterRoomMapper
 import com.cmdv.data.mapper.GetCharactersResponseMapper
 import com.cmdv.data.source.dao.CharactersDao
@@ -30,11 +31,11 @@ class CharacterRepositoryImpl(
         limit: Int,
         offset: Int
     ): LiveDataStatusWrapper<List<CharacterModel>> = runBlocking {
-        val storedCharacters = getAll()
+        val storedCharacters = getStoredCharacters()
 
         if (fetch || storedCharacters.isEmpty()) {
             fetchCharacters(limit, offset).let {
-                it.data?.let { data -> store(data) }
+                it.data?.let { data -> storeCharacters(data) }
                 it
             }
         } else {
@@ -42,20 +43,26 @@ class CharacterRepositoryImpl(
         }
     }
 
+    override fun fetchCharacterById(characterId: Int): LiveDataStatusWrapper<CharacterModel> =
+        doNetworkRequest(charactersApi.getCharacterById(characterId)) { response ->
+            response.data?.results?.get(0)!!.let {
+                CharacterMapper.transformEntityToModel(it)
+            }
+        }
+
     private fun fetchCharacters(limit: Int, offset: Int): LiveDataStatusWrapper<ArrayList<CharacterModel>> =
         doNetworkRequest(charactersApi.getCharacters(limit, offset)) { response ->
             GetCharactersResponseMapper.transformEntityToModel(response).characters
         }
 
-
-    private fun getAll(): List<CharacterModel> =
+    private fun getStoredCharacters(): List<CharacterModel> =
         charactersDao.getAll().map {
             CharacterRoomMapper.transformEntityToModel(it).apply {
                 isFavourite = favoriteCharactersDao.getById(id) != null
             }
         }
 
-    private fun store(characters: List<CharacterModel>) {
+    private fun storeCharacters(characters: List<CharacterModel>) {
         characters.map {
             CharacterRoomMapper.transformModelToEntity(it).apply {
                 isFavorite = favoriteCharactersDao.getById(characterId) != null

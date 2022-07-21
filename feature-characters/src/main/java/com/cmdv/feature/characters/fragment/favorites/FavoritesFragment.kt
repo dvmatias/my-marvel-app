@@ -1,4 +1,4 @@
-package com.cmdv.feature.characters.fragment
+package com.cmdv.feature.characters.fragment.favorites
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.View
@@ -44,7 +44,7 @@ class FavoritesFragment :
     }
 
     override fun observe() {
-        viewModel.favoriteCharacters.observe(this, {
+        viewModel.favoriteCharacters.observe(this) {
             when (it.status) {
                 Status.LOADING -> setLoadingViewState()
                 Status.SUCCESS -> {
@@ -54,13 +54,13 @@ class FavoritesFragment :
                 }
                 Status.ERROR -> setErrorViewState()
             }
-        })
+        }
 
-        viewModel.removeAll.observe(this, { event ->
+        viewModel.removeAll.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
                 viewModel.getFavoritesCharacters()
             }
-        })
+        }
     }
 
     private fun setupRecycler() {

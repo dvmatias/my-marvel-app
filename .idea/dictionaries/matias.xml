@@ -2,6 +2,7 @@
   <dictionary name="matias">
     <words>
       <w>apikey</w>
+      <w>characterdetails</w>
       <w>cmdv</w>
       <w>gson</w>
       <w>koin</w>

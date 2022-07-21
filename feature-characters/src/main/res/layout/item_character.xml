@@ -57,9 +57,9 @@
 
             <TextView
                 android:id="@+id/textViewName"
+                style="@style/TitleText.Big"
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/cereal_bold"
                 android:lines="2"
                 android:gravity="center_vertical"
                 android:ellipsize="end"
@@ -78,6 +78,7 @@
 
             <TextView
                 android:id="@+id/textViewDescription"
+                style="@style/BodyText.Small"
                 android:layout_width="@dimen/follow_constraints"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cereal_book"

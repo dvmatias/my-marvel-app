@@ -33,7 +33,7 @@
     <dimen name="text_26sp">26sp</dimen>
     <dimen name="text_32sp">32sp</dimen>
 
-    <dimen name="main_shadow_height">72dp</dimen>
+    <dimen name="main_shadow_height">32dp</dimen>
     <dimen name="bottom_nav_view_height">56dp</dimen>
 
     <dimen name="body_text_size_small">12sp</dimen>
